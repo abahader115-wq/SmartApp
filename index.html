@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Helper AI</title>
+
+<link rel="manifest" href="/manifest.json">
+
+<meta name="theme-color" content="#6366f1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Smart Helper">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    min-height:100vh;
+    color:#fff;
+    background:
+        radial-gradient(circle at top left,#1e1b4b 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#312e81 0%,transparent 35%),
+        #080b1a;
+}
+
+button{
+    font-family:inherit;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* AUTH */
+
+.auth-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.auth-box{
+    width:100%;
+    max-width:430px;
+    padding:35px;
+    border-radius:24px;
+    background:rgba(17,24,39,.82);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 25px 80px rgba(0,0,0,.45);
+    backdrop-filter:blur(18px);
+}
+
+.logo{
+    text-align:center;
+    font-size:42px;
+    margin-bottom:8px;
+}
+
+.auth-box h1{
+    text-align:center;
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#9ca3af;
+    margin-bottom:28px;
+}
+
+.input{
+    width:100%;
+    padding:14px 16px;
+    margin-bottom:14px;
+    border-radius:12px;
+    border:1px solid #374151;
+    background:#111827;
+    color:#fff;
+    outline:none;
+    font-size:15px;
+}
+
+.input:focus{
+    border-color:#6366f1;
+}
+
+.primary-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.primary-btn:hover{
+    transform:translateY(-1px);
+    opacity:.95;
+}
+
+.auth-switch{
+    text-align:center;
+    margin-top:20px;
+    color:#9ca3af;
+}
+
+.auth-switch button{
+    background:none;
+    border:none;
+    color:#818cf8;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* APP */
+
+.app{
+    min-height:100vh;
+}
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    padding:16px 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(8,11,26,.82);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brand-icon{
+    font-size:30px;
+}
+
+.brand h1{
+    font-size:21px;
+}
+
+.brand p{
+    color:#9ca3af;
+    font-size:12px;
+    margin-top:2px;
+}
+
+.logout-btn{
+    padding:9px 14px;
+    border-radius:10px;
+    border:1px solid #374151;
+    background:#111827;
+    color:#fff;
+    cursor:pointer;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:35px 20px 60px;
+}
+
+.welcome{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.welcome h2{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.welcome p{
+    color:#9ca3af;
+}
+
+/* TOOLS */
+
+.tools{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+    margin-bottom:25px;
+}
+
+.tool-card{
+    padding:20px 14px;
+    min-height:125px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(17,24,39,.72);
+    cursor:pointer;
+    text-align:center;
+    transition:.25s;
+}
+
+.tool-card:hover{
+    transform:translateY(-4px);
+    border-color:#6366f1;
+    background:rgba(30,41,59,.9);
+}
+
+.tool-icon{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.tool-card h3{
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.tool-card p{
+    color:#9ca3af;
+    font-size:11px;
+}
+
+/* TOOL PANEL */
+
+.tool-panel{
+    background:rgba(17,24,39,.78);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    padding:25px;
+    margin-top:20px;
+    box-shadow:0 15px 50px rgba(0,0,0,.22);
+}
+
+.tool-panel h2{
+    margin-bottom:8px;
+}
+
+.tool-description{
+    color:#9ca3af;
+    margin-bottom:20px;
+}
+
+textarea{
+    width:100%;
+    min-height:150px;
+    resize:vertical;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid #374151;
+    background:#0f172a;
+    color:#fff;
+    outline:none;
+    font-size:15px;
+    line-height:1.5;
+}
+
+textarea:focus{
+    border-color:#6366f1;
+}
+
+.action-btn{
+    margin-top:14px;
+    padding:12px 20px;
+    border:none;
+    border-radius:11px;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.secondary-btn{
+    padding:10px 15px;
+    border:1px solid #374151;
+    border-radius:10px;
+    background:#111827;
+    color:#fff;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:20px;
+    padding:18px;
+    border-radius:14px;
+    background:#0b1220;
+    border:1px solid #1f2937;
+    white-space:pre-wrap;
+    line-height:1.6;
+    min-height:50px;
+}
+
+.loading{
+    color:#a5b4fc;
+}
+
+.error{
+    color:#fca5a5;
+}
+
+/* CHAT */
+
+.chat-box{
+    height:400px;
+    overflow-y:auto;
+    padding:15px;
+    background:#080d18;
+    border-radius:15px;
+    border:1px solid #1f2937;
+    margin-bottom:14px;
+}
+
+.chat-message{
+    max-width:85%;
+    padding:12px 15px;
+    border-radius:14px;
+    margin-bottom:12px;
+    line-height:1.5;
+    white-space:pre-wrap;
+}
+
+.user-message{
+    margin-left:auto;
+    background:#4f46e5;
+}
+
+.ai-message{
+    margin-right:auto;
+    background:#1f2937;
+}
+
+.chat-input-row{
+    display:flex;
+    gap:10px;
+}
+
+.chat-input-row input{
+    flex:1;
+    padding:13px 15px;
+    border-radius:12px;
+    border:1px solid #374151;
+    background:#0f172a;
+    color:#fff;
+    outline:none;
+}
+
+.chat-input-row button{
+    padding:0 20px;
+    border:none;
+    border-radius:12px;
+    background:#6366f1;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* HISTORY */
+
+.history-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+    gap:10px;
+}
+
+.history-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.history-item{
+    padding:16px;
+    border-radius:14px;
+    background:#0b1220;
+    border:1px solid #1f2937;
+}
+
+.history-question{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.history-answer{
+    color:#cbd5e1;
+    white-space:pre-wrap;
+    line-height:1.5;
+}
+
+.history-date{
+    color:#6b7280;
+    font-size:11px;
+    margin-top:10px;
+}
+
+/* NOTES */
+
+.notes-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:20px;
+}
+
+.note-item{
+    background:#0b1220;
+    border:1px solid #1f2937;
+    border-radius:15px;
+    padding:17px;
+}
+
+.note-title{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.note-text{
+    color:#cbd5e1;
+    white-space:pre-wrap;
+    line-height:1.6;
+    margin-bottom:13px;
+}
+
+.note-date{
+    color:#6b7280;
+    font-size:11px;
+    margin-bottom:12px;
+}
+
+.note-actions{
+    display:flex;
+    gap:8px;
+}
+
+.delete-note{
+    padding:8px 12px;
+    border:1px solid #7f1d1d;
+    border-radius:9px;
+    background:#450a0a;
+    color:#fecaca;
+    cursor:pointer;
+}
+
+.empty-notes{
+    text-align:center;
+    padding:30px;
+    color:#6b7280;
+    border:1px dashed #374151;
+    border-radius:14px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:950px){
+
+    .tools{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+@media(max-width:650px){
+
+    .header{
+        padding:14px;
+    }
+
+    .container{
+        padding:25px 14px 45px;
+    }
+
+    .welcome h2{
+        font-size:26px;
+    }
+
+    .tools{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .tool-card{
+        min-height:115px;
+    }
+
+    .tool-panel{
+        padding:18px;
+    }
+
+    .chat-input-row{
+        flex-direction:column;
+    }
+
+    .chat-input-row button{
+        padding:12px;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .tools{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- AUTH SCREEN -->
+
+<div id="authScreen" class="auth-screen">
+
+    <div class="auth-box">
+
+        <div class="logo">🧠</div>
+
+        <h1>Smart Helper AI</h1>
+
+        <p class="subtitle">
+            Your everyday AI assistant
+        </p>
+
+        <!-- LOGIN -->
+
+        <div id="loginForm">
+
+            <input
+                id="loginEmail"
+                class="input"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="loginPassword"
+                class="input"
+                type="password"
+                placeholder="Password"
+            >
+
+            <button
+                class="primary-btn"
+                onclick="login()"
+            >
+                Login
+            </button>
+
+            <p class="auth-switch">
+                Don't have an account?
+                <button onclick="showSignup()">
+                    Sign Up
+                </button>
+            </p>
+
+        </div>
+
+        <!-- SIGNUP -->
+
+        <div id="signupForm" class="hidden">
+
+            <input
+                id="signupName"
+                class="input"
+                type="text"
+                placeholder="Your Name"
+            >
+
+            <input
+                id="signupEmail"
+                class="input"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="signupPassword"
+                class="input"
+                type="password"
+                placeholder="Password"
+            >
+
+            <button
+                class="primary-btn"
+                onclick="signup()"
+            >
+                Create Account
+            </button>
+
+            <p class="auth-switch">
+                Already have an account?
+                <button onclick="showLogin()">
+                    Login
+                </button>
+            </p>
+
+        </div>
+
+        <div id="authMessage" class="result hidden"></div>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN APP -->
+
+<div id="app" class="app hidden">
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="brand-icon">🧠</div>
+
+            <div>
+                <h1>Smart Helper</h1>
+                <p>Your everyday AI assistant</p>
+            </div>
+
+        </div>
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="welcome">
+
+            <h2>Welcome to Smart Helper</h2>
+
+            <p>
+                Choose a tool and let AI help you.
+            </p>
+
+        </div>
+
+
+        <!-- TOOLS -->
+
+        <div class="tools">
+
+            <div
+                class="tool-card"
+                onclick="showTool('rewriteTool')"
+            >
+
+                <div class="tool-icon">✍️</div>
+
+                <h3>Rewrite</h3>
+
+                <p>Improve your text</p>
+
+            </div>
+
+
+            <div
+                class="tool-card"
+                onclick="showTool('translateTool')"
+            >
+
+                <div class="tool-icon">🌐</div>
+
+                <h3>Translate</h3>
+
+                <p>Translate your text</p>
+
+            </div>
+
+
+            <div
+                class="tool-card"
+                onclick="showTool('askTool')"
+            >
+
+                <div class="tool-icon">🤖</div>
+
+                <h3>Ask AI</h3>
+
+                <p>Ask anything</p>
+
+            </div>
+
+
+            <div
+                class="tool-card"
+                onclick="openChat()"
+            >
+
+                <div class="tool-icon">💬</div>
+
+                <h3>Chat</h3>
+
+                <p>Chat with AI</p>
+
+            </div>
+
+
+            <div
+                class="tool-card"
+                onclick="openHistory()"
+            >
+
+                <div class="tool-icon">📜</div>
+
+                <h3>Chat History</h3>
+
+                <p>View previous chats</p>
+
+            </div>
+
+
+            <div
+                class="tool-card"
+                onclick="openNotes()"
+            >
+
+                <div class="tool-icon">📝</div>
+
+                <h3>Notes</h3>
+
+                <p>Save your notes</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ASK AI -->
+
+        <section
+            id="askTool"
+            class="tool-panel"
+        >
+
+            <h2>🤖 Ask AI</h2>
+
+            <p class="tool-description">
+                Ask Smart Helper anything.
+            </p>
+
+            <textarea
+                id="message"
+                placeholder="Type your question here..."
+            ></textarea>
+
+            <button
+                id="askBtn"
+                class="action-btn"
+                onclick="askMain()"
+            >
+                ✨ Ask Smart Helper
+            </button>
+
+            <div
+                id="askResult"
+                class="result hidden"
+            ></div>
+
+        </section>
+
+
+        <!-- REWRITE -->
+
+        <section
+            id="rewriteTool"
+            class="tool-panel hidden"
+        >
+
+            <h2>✍️ Rewrite</h2>
+
+            <p class="tool-description">
+                Make your text clearer and better.
+            </p>
+
+            <textarea
+                id="rewriteInput"
+                placeholder="Enter text you want to rewrite..."
+            ></textarea>
+
+            <button
+                class="action-btn"
+                onclick="rewriteText()"
+            >
+                Rewrite Text
+            </button>
+
+            <div
+                id="rewriteResult"
+                class="result hidden"
+            ></div>
+
+        </section>
+
+
+        <!-- TRANSLATE -->
+
+        <section
+            id="translateTool"
+            class="tool-panel hidden"
+        >
+
+            <h2>🌐 Translate</h2>
+
+            <p class="tool-description">
+                Translate your text into another language.
+            </p>
+
+            <textarea
+                id="translateInput"
+                placeholder="Enter text to translate..."
+            ></textarea>
+
+            <button
+                class="action-btn"
+                onclick="translateText()"
+            >
+                Translate to Urdu
+            </button>
+
+            <div
+                id="translateResult"
+                class="result hidden"
+            ></div>
+
+        </section>
+
+
+        <!-- CHAT -->
+
+        <section
+            id="chatTool"
+            class="tool-panel hidden"
+        >
+
+            <h2>💬 AI Chat</h2>
+
+            <p class="tool-description">
+                Have a conversation with Smart Helper.
+            </p>
+
+            <div
+                id="chatBox"
+                class="chat-box"
+            ></div>
+
+            <div class="chat-input-row">
+
+                <input
+                    id="chatInput"
+                    type="text"
+                    placeholder="Type a message..."
+                >
+
+                <button onclick="sendChat()">
+                    Send
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORY -->
+
+        <section
+            id="historyTool"
+            class="tool-panel hidden"
+        >
+
+            <div class="history-header">
+
+                <div>
+                    <h2>📜 Chat History</h2>
+
+                    <p class="tool-description">
+                        Your previous AI conversations.
+                    </p>
+                </div>
+
+                <button
+                    class="secondary-btn"
+                    onclick="clearHistory()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+            <div
+                id="historyList"
+                class="history-list"
+            ></div>
+
+        </section>
+
+
+        <!-- NOTES -->
+
+        <section
+            id="notesTool"
+            class="tool-panel hidden"
+        >
+
+            <h2>📝 Notes</h2>
+
+            <p class="tool-description">
+                Save important notes directly in Smart Helper.
+            </p>
+
+
+            <input
+                id="noteTitle"
+                class="input"
+                type="text"
+                placeholder="Note title..."
+            >
+
+
+            <textarea
+                id="noteText"
+                placeholder="Write your note here..."
+            ></textarea>
+
+
+            <button
+                class="action-btn"
+                onclick="saveNote()"
+            >
+                💾 Save Note
+            </button>
+
+
+            <div
+                id="notesList"
+                class="notes-list"
+            ></div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/* =========================
+   API HELPER
+========================= */
+
+async function apiFetch(url, options = {}){
+
+    options.credentials = "include";
+
+    if(options.body && typeof options.body !== "string"){
+        options.headers = {
+            ...(options.headers || {}),
+            "Content-Type":"application/json"
+        };
+
+        options.body = JSON.stringify(options.body);
+    }
+
+    const response = await fetch(url, options);
+
+    let data = {};
+
+    try{
+        data = await response.json();
+    }catch(e){}
+
+    if(!response.ok){
+        throw new Error(
+            data.error ||
+            data.message ||
+            "Something went wrong"
+        );
+    }
+
+    return data;
+}
+
+
+/* =========================
+   AUTH
+========================= */
+
+function showLogin(){
+
+    document.getElementById("loginForm")
+        .classList.remove("hidden");
+
+    document.getElementById("signupForm")
+        .classList.add("hidden");
+
+    document.getElementById("authMessage")
+        .classList.add("hidden");
+}
+
+
+function showSignup(){
+
+    document.getElementById("loginForm")
+        .classList.add("hidden");
+
+    document.getElementById("signupForm")
+        .classList.remove("hidden");
+
+    document.getElementById("authMessage")
+        .classList.add("hidden");
+}
+
+
+function showAuthMessage(message){
+
+    const box =
+        document.getElementById("authMessage");
+
+    box.textContent = message;
+
+    box.classList.remove("hidden");
+}
+
+
+async function signup(){
+
+    const name =
+        document.getElementById("signupName").value.trim();
+
+    const email =
+        document.getElementById("signupEmail").value.trim();
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+    if(!name || !email || !password){
+
+        showAuthMessage(
+            "Please fill all fields."
+        );
+
+        return;
+    }
+
+    try{
+
+        await apiFetch("/signup",{
+            method:"POST",
+            body:{
+                name,
+                email,
+                password
+            }
+        });
+
+        showAuthMessage(
+            "Account created successfully. You can now login."
+        );
+
+        showLogin();
+
+    }catch(error){
+
+        showAuthMessage(error.message);
+
+    }
+}
+
+
+async function login(){
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    if(!email || !password){
+
+        showAuthMessage(
+            "Please enter email and password."
+        );
+
+        return;
+    }
+
+    try{
+
+        await apiFetch("/login",{
+            method:"POST",
+            body:{
+                email,
+                password
+            }
+        });
+
+        showApp();
+
+    }catch(error){
+
+        showAuthMessage(error.message);
+
+    }
+}
+
+
+async function logout(){
+
+    try{
+
+        await apiFetch("/logout",{
+            method:"POST"
+        });
+
+    }catch(error){}
+
+    document.getElementById("app")
+        .classList.add("hidden");
+
+    document.getElementById("authScreen")
+        .classList.remove("hidden");
+
+    showLogin();
+}
+
+
+async function checkSession(){
+
+    try{
+
+        const data =
+            await apiFetch("/me");
+
+        if(data.user){
+
+            showApp();
+
+        }else{
+
+            showAuth();
+
+        }
+
+    }catch(error){
+
+        showAuth();
+
+    }
+}
+
+
+function showAuth(){
+
+    document.getElementById("authScreen")
+        .classList.remove("hidden");
+
+    document.getElementById("app")
+        .classList.add("hidden");
+
+}
+
+
+function showApp(){
+
+    document.getElementById("authScreen")
+        .classList.add("hidden");
+
+    document.getElementById("app")
+        .classList.remove("hidden");
+
+    showTool("askTool");
+
+}
+
+
+/* =========================
+   TOOLS
+========================= */
+
+function hideAllTools(){
+
+    const tools = [
+        "askTool",
+        "rewriteTool",
+        "translateTool",
+        "chatTool",
+        "historyTool",
+        "notesTool"
+    ];
+
+    tools.forEach(id => {
+
+        const element =
+            document.getElementById(id);
+
+        if(element){
+            element.classList.add("hidden");
+        }
+
+    });
+
+}
+
+
+function showTool(id){
+
+    hideAllTools();
+
+    const element =
+        document.getElementById(id);
+
+    if(element){
+        element.classList.remove("hidden");
+    }
+
+}
+
+
+/* =========================
+   ASK AI
+========================= */
+
+async function askMain(){
+
+    const input =
+        document.getElementById("message");
+
+    const result =
+        document.getElementById("askResult");
+
+    const button =
+        document.getElementById("askBtn");
+
+    const message =
+        input.value.trim();
+
+    if(!message){
+
+        result.textContent =
+            "Please enter a question.";
+
+        result.classList.remove("hidden");
+
+        return;
+    }
+
+    button.disabled = true;
+
+    button.textContent =
+        "Thinking...";
+
+    result.classList.remove("hidden");
+
+    result.textContent =
+        "Smart Helper is thinking...";
+
+    try{
+
+        const data =
+            await apiFetch("/ask",{
+                method:"POST",
+                body:{
+                    message
+                }
+            });
+
+        result.textContent =
+            data.reply || "No reply received.";
+
+    }catch(error){
+
+        result.textContent =
+            error.message;
+
+        result.classList.add("error");
+
+    }finally{
+
+        button.disabled = false;
+
+        button.textContent =
+            "✨ Ask Smart Helper";
+
+    }
+
+}
+
+
+/* =========================
+   REWRITE
+========================= */
+
+async function rewriteText(){
+
+    const input =
+        document.getElementById("rewriteInput");
+
+    const result =
+        document.getElementById("rewriteResult");
+
+    const text =
+        input.value.trim();
+
+    if(!text){
+
+        result.textContent =
+            "Please enter some text.";
+
+        result.classList.remove("hidden");
+
+        return;
+    }
+
+    result.classList.remove("hidden");
+
+    result.classList.remove("error");
+
+    result.textContent =
+        "Rewriting...";
+
+    try{
+
+        const data =
+            await apiFetch("/ask",{
+                method:"POST",
+                body:{
+                    message:
+                        "Rewrite the following text clearly and professionally. Return only the rewritten text:\n\n"
+                        + text
+                }
+            });
+
+        result.textContent =
+            data.reply || "No result.";
+
+    }catch(error){
+
+        result.textContent =
+            error.message;
+
+        result.classList.add("error");
+
+    }
+
+}
+
+
+/* =========================
+   TRANSLATE
+========================= */
+
+async function translateText(){
+
+    const input =
+        document.getElementById("translateInput");
+
+    const result =
+        document.getElementById("translateResult");
+
+    const text =
+        input.value.trim();
+
+    if(!text){
+
+        result.textContent =
+            "Please enter text to translate.";
+
+        result.classList.remove("hidden");
+
+        return;
+    }
+
+    result.classList.remove("hidden");
+
+    result.classList.remove("error");
+
+    result.textContent =
+        "Translating...";
+
+    try{
+
+        const data =
+            await apiFetch("/translate",{
+                method:"POST",
+                body:{
+                    text,
+                    language:"Urdu"
+                }
+            });
+
+        result.textContent =
+            data.translation ||
+            data.reply ||
+            "No translation received.";
+
+    }catch(error){
+
+        result.textContent =
+            error.message;
+
+        result.classList.add("error");
+
+    }
+
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+function openChat(){
+
+    showTool("chatTool");
+
+}
+
+
+function addChatMessage(text,type){
+
+    const chatBox =
+        document.getElementById("chatBox");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "chat-message " +
+        (type === "user"
+            ? "user-message"
+            : "ai-message");
+
+    message.textContent = text;
+
+    chatBox.appendChild(message);
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+}
+
+
+async function sendChat(){
+
+    const input =
+        document.getElementById("chatInput");
+
+    const message =
+        input.value.trim();
+
+    if(!message){
+        return;
+    }
+
+    addChatMessage(
+        message,
+        "user"
+    );
+
+    input.value = "";
+
+    addChatMessage(
+        "Thinking...",
+        "ai"
+    );
+
+    const chatBox =
+        document.getElementById("chatBox");
+
+    try{
+
+        const data =
+            await apiFetch("/ask",{
+                method:"POST",
+                body:{
+                    message
+                }
+            });
+
+        const messages =
+            chatBox.querySelectorAll(".ai-message");
+
+        const lastMessage =
+            messages[messages.length - 1];
+
+        if(lastMessage){
+
+            lastMessage.textContent =
+                data.reply ||
+                "No reply received.";
+
+        }
+
+    }catch(error){
+
+        const messages =
+            chatBox.querySelectorAll(".ai-message");
+
+        const lastMessage =
+            messages[messages.length - 1];
+
+        if(lastMessage){
+
+            lastMessage.textContent =
+                error.message;
+
+        }
+
+    }
+
+}
+
+
+document.getElementById("chatInput")
+    .addEventListener("keydown",function(event){
+
+        if(event.key === "Enter"){
+
+            event.preventDefault();
+
+            sendChat();
+
+        }
+
+    });
+
+
+/* =========================
+   CHAT HISTORY
+========================= */
+
+async function openHistory(){
+
+    showTool("historyTool");
+
+    await loadHistory();
+
+}
+
+
+async function loadHistory(){
+
+    const list =
+        document.getElementById("historyList");
+
+    list.innerHTML =
+        '<div class="loading">Loading history...</div>';
+
+    try{
+
+        const data =
+            await apiFetch("/history");
+
+        const chats =
+            data.chats || [];
+
+        if(chats.length === 0){
+
+            list.innerHTML =
+                '<div class="empty-notes">No chat history yet.</div>';
+
+            return;
+        }
+
+        list.innerHTML = "";
+
+        chats.forEach(chat => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "history-item";
+
+            const date =
+                chat.created_at
+                ? new Date(chat.created_at)
+                    .toLocaleString()
+                : "";
+
+            item.innerHTML = `
+                <div class="history-question">
+                    ${escapeHTML(chat.message || "")}
+                </div>
+
+                <div class="history-answer">
+                    ${escapeHTML(chat.reply || "")}
+                </div>
+
+                <div class="history-date">
+                    ${escapeHTML(date)}
+                </div>
+            `;
+
+            list.appendChild(item);
+
+        });
+
+    }catch(error){
+
+        list.innerHTML =
+            '<div class="error">' +
+            escapeHTML(error.message) +
+            '</div>';
+
+    }
+
+}
+
+
+async function clearHistory(){
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to clear chat history?"
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    try{
+
+        await apiFetch("/history",{
+            method:"DELETE"
+        });
+
+        await loadHistory();
+
+    }catch(error){
+
+        alert(error.message);
+
+    }
+
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+function openNotes(){
+
+    showTool("notesTool");
+
+    loadNotes();
+
+}
+
+
+function getNotes(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem("smartHelperNotes") || "[]"
+        );
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+function saveNotes(notes){
+
+    localStorage.setItem(
+        "smartHelperNotes",
+        JSON.stringify(notes)
+    );
+
+}
+
+
+function saveNote(){
+
+    const title =
+        document.getElementById("noteTitle")
+            .value.trim();
+
+    const text =
+        document.getElementById("noteText")
+            .value.trim();
+
+    if(!title && !text){
+
+        alert("Please write something in your note.");
+
+        return;
+    }
+
+    const notes =
+        getNotes();
+
+    notes.unshift({
+
+        id:Date.now(),
+
+        title:
+            title || "Untitled Note",
+
+        text,
+
+        date:
+            new Date().toLocaleString()
+
+    });
+
+    saveNotes(notes);
+
+    document.getElementById("noteTitle")
+        .value = "";
+
+    document.getElementById("noteText")
+        .value = "";
+
+    loadNotes();
+
+}
+
+
+function loadNotes(){
+
+    const list =
+        document.getElementById("notesList");
+
+    const notes =
+        getNotes();
+
+    if(notes.length === 0){
+
+        list.innerHTML =
+            `
+            <div class="empty-notes">
+                📝 No notes yet.<br>
+                Write your first note above.
+            </div>
+            `;
+
+        return;
+    }
+
+    list.innerHTML = "";
+
+    notes.forEach(note => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "note-item";
+
+        item.innerHTML = `
+
+            <div class="note-title">
+                ${escapeHTML(note.title)}
+            </div>
+
+            <div class="note-text">
+                ${escapeHTML(note.text)}
+            </div>
+
+            <div class="note-date">
+                ${escapeHTML(note.date)}
+            </div>
+
+            <div class="note-actions">
+
+                <button
+                    class="delete-note"
+                    onclick="deleteNote(${note.id})"
+                >
+                    🗑 Delete
+                </button>
+
+            </div>
+
+        `;
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+function deleteNote(id){
+
+    const confirmed =
+        confirm(
+            "Delete this note?"
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    const notes =
+        getNotes().filter(
+            note => note.id !== id
+        );
+
+    saveNotes(notes);
+
+    loadNotes();
+
+}
+
+
+/* =========================
+   HTML SAFETY
+========================= */
+
+function escapeHTML(value){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value == null
+        ? ""
+        : String(value);
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================
+   PWA
+========================= */
+
+if("serviceWorker" in navigator){
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register("/service-worker.js")
+                .then(() => {
+
+                    console.log(
+                        "Smart Helper PWA ready"
+                    );
+
+                })
+                .catch(error => {
+
+                    console.log(
+                        "PWA error:",
+                        error
+                    );
+
+                });
+
+        }
+    );
+
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+checkSession();
+
+</script>
+
+</body>
+</html>

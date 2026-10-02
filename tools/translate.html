@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Translate - Smart Helper</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 35px 20px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 25px;
+      color: #2563eb;
+      cursor: pointer;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #6b7280;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      padding: 15px;
+      margin-top: 20px;
+      box-sizing: border-box;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    select {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 16px;
+      background: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 25px;
+      padding: 20px;
+      background: white;
+      border-radius: 14px;
+      min-height: 50px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="back" onclick="history.back()">← Back</div>
+
+  <h1>🌐 Translate</h1>
+
+  <p>Translate your text into another language.</p>
+
+  <textarea id="text" placeholder="Write your text here..."></textarea>
+
+  <select id="language">
+    <option value="Urdu">Urdu</option>
+    <option value="English">English</option>
+    <option value="Spanish">Spanish</option>
+    <option value="French">French</option>
+    <option value="Arabic">Arabic</option>
+    <option value="German">German</option>
+  </select>
+
+  <button onclick="translateText()">
+    Translate Text
+  </button>
+
+  <div id="result">
+    Your translation will appear here.
+  </div>
+
+</div>
+
+<script>
+
+function translateText() {
+
+  const text = document.getElementById("text").value.trim();
+  const language = document.getElementById("language").value;
+  const result = document.getElementById("result");
+
+  if (!text) {
+    result.innerText = "Please write something first.";
+    return;
+  }
+
+  result.innerText =
+    "Translation feature will be connected later.\n\n" +
+    "Selected language: " + language + "\n\n" +
+    "Your text:\n" + text;
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,445 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Helper AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 50px 0;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #cbd5e1;
+      font-size: 17px;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      margin-bottom: 18px;
+    }
+
+    textarea:focus {
+      border-color: #3b82f6;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    button,
+    select {
+      height: 48px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button {
+      border: none;
+      padding: 0 20px;
+      color: white;
+    }
+
+    #askBtn {
+      background: #2563eb;
+    }
+
+    #askBtn:hover {
+      background: #1d4ed8;
+    }
+
+    #translateBtn {
+      background: #16a34a;
+    }
+
+    #translateBtn:hover {
+      background: #15803d;
+    }
+
+    #notesBtn {
+      background: #7c3aed;
+    }
+
+    #notesBtn:hover {
+      background: #6d28d9;
+    }
+
+    #languageSelect {
+      background: #020617;
+      color: white;
+      border: 1px solid #64748b;
+      padding: 0 15px;
+      min-width: 145px;
+      outline: none;
+    }
+
+    #languageSelect option {
+      background: #020617;
+      color: white;
+    }
+
+    .answer-box {
+      margin-top: 25px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 100px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      color: #e2e8f0;
+    }
+
+    .answer-title {
+      color: #93c5fd;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .notes-box {
+      display: none;
+      margin-top: 20px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .notes-box h3 {
+      margin-bottom: 12px;
+    }
+
+    #notesText {
+      width: 100%;
+      min-height: 150px;
+      background: #1e293b;
+      color: white;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 15px;
+      resize: vertical;
+      font-size: 15px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 0;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      button,
+      select {
+        width: 100%;
+      }
+
+      #languageSelect {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="hero">
+      <h1>🤖 Smart Helper AI</h1>
+      <p>Your everyday AI assistant</p>
+    </div>
+
+    <div class="card">
+
+      <textarea
+        id="message"
+        placeholder="Write your message here..."
+      ></textarea>
+
+      <div class="buttons">
+
+        <button id="askBtn">
+          ✨ Ask Smart Helper
+        </button>
+
+        <select id="languageSelect">
+          <option value="Urdu">Urdu</option>
+          <option value="English">English</option>
+          <option value="Arabic">Arabic</option>
+          <option value="Hindi">Hindi</option>
+          <option value="French">French</option>
+          <option value="Spanish">Spanish</option>
+          <option value="German">German</option>
+          <option value="Chinese">Chinese</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Korean">Korean</option>
+          <option value="Italian">Italian</option>
+          <option value="Portuguese">Portuguese</option>
+          <option value="Russian">Russian</option>
+          <option value="Turkish">Turkish</option>
+        </select>
+
+        <button id="translateBtn">
+          🌐 Translate
+        </button>
+
+        <button id="notesBtn">
+          📝 Notes
+        </button>
+
+      </div>
+
+      <div class="answer-box">
+        <div class="answer-title">Answer</div>
+        <div id="answer">Your answer will appear here...</div>
+      </div>
+
+      <div class="notes-box" id="notesBox">
+        <h3>📝 My Notes</h3>
+
+        <textarea
+          id="notesText"
+          placeholder="Write your notes here..."
+        ></textarea>
+      </div>
+
+    </div>
+
+   
+
+  </div>
+
+
+  <script>
+
+    const messageBox = document.getElementById("message");
+    const answer = document.getElementById("answer");
+
+    const askBtn = document.getElementById("askBtn");
+    const translateBtn = document.getElementById("translateBtn");
+    const notesBtn = document.getElementById("notesBtn");
+
+    const languageSelect =
+      document.getElementById("languageSelect");
+
+    const notesBox =
+      document.getElementById("notesBox");
+
+    const notesText =
+      document.getElementById("notesText");
+
+
+    // ASK AI
+    askBtn.addEventListener("click", async function () {
+
+      const text = messageBox.value.trim();
+
+      if (!text) {
+        answer.textContent = "Please write something first.";
+        return;
+      }
+
+      askBtn.disabled = true;
+      askBtn.textContent = "Thinking...";
+      answer.textContent = "Thinking...";
+
+      try {
+
+        const response = await fetch("/ask", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            message: text
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.reply) {
+          answer.textContent = data.reply;
+        } else {
+          answer.textContent =
+            "AI Error: " +
+            (data.error || "Unknown error");
+        }
+
+      } catch (error) {
+
+        answer.textContent =
+          "Could not connect to AI server.";
+
+      }
+
+      askBtn.disabled = false;
+      askBtn.textContent = "✨ Ask Smart Helper";
+
+    });
+
+
+    // TRANSLATE
+    translateBtn.addEventListener("click", async function () {
+
+      const text = messageBox.value.trim();
+
+      const language = languageSelect.value;
+
+      if (!text) {
+        answer.textContent = "Please write something first.";
+        return;
+      }
+
+      translateBtn.disabled = true;
+      translateBtn.textContent = "Translating...";
+      answer.textContent = "Translating...";
+
+      try {
+
+        const response = await fetch("/translate", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            text: text,
+            language: language
+          })
+
+        });
+
+        const data = await response.json();
+
+        if (data.translation) {
+
+          answer.textContent = data.translation;
+
+        } else {
+
+          answer.textContent =
+            "Translation Error: " +
+            (data.error || "Unknown error");
+
+        }
+
+      } catch (error) {
+
+        answer.textContent =
+          "Could not connect to translation server.";
+
+      }
+
+      translateBtn.disabled = false;
+      translateBtn.textContent = "🌐 Translate";
+
+    });
+
+
+    // NOTES
+    notesBtn.addEventListener("click", function () {
+
+      if (notesBox.style.display === "block") {
+
+        notesBox.style.display = "none";
+
+      } else {
+
+        notesBox.style.display = "block";
+
+      }
+
+    });
+
+
+    // SAVE NOTES AUTOMATICALLY
+    notesText.addEventListener("input", function () {
+
+      localStorage.setItem(
+        "smartHelperNotes",
+        notesText.value
+      );
+
+    });
+
+
+    // LOAD NOTES
+    notesText.value =
+      localStorage.getItem("smartHelperNotes") || "";
+
+  </script>
+
+</body>
+</html>

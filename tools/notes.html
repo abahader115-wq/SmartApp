@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes - Smart Helper</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 35px 20px;
+    }
+
+    .back {
+      color: #2563eb;
+      margin-bottom: 25px;
+      cursor: pointer;
+    }
+
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 15px;
+      margin-top: 15px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    textarea {
+      height: 160px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .note {
+      background: white;
+      padding: 18px;
+      margin-top: 20px;
+      border-radius: 14px;
+    }
+
+    .delete {
+      background: #dc2626;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="back" onclick="history.back()">← Back</div>
+
+  <h1>📝 Notes</h1>
+
+  <p>Create and save your notes.</p>
+
+  <input id="title" placeholder="Note title...">
+
+  <textarea id="content" placeholder="Write your note here..."></textarea>
+
+  <button onclick="saveNote()">Save Note</button>
+
+  <div id="notes"></div>
+
+</div>
+
+<script>
+
+let notes = JSON.parse(localStorage.getItem("smartNotes")) || [];
+
+function saveNote() {
+
+  let title = document.getElementById("title").value.trim();
+  let content = document.getElementById("content").value.trim();
+
+  if (!title || !content) {
+    alert("Please enter a title and note.");
+    return;
+  }
+
+  notes.push({
+    title: title,
+    content: content
+  });
+
+  localStorage.setItem("smartNotes", JSON.stringify(notes));
+
+  document.getElementById("title").value = "";
+  document.getElementById("content").value = "";
+
+  showNotes();
+}
+
+function deleteNote(index) {
+
+  notes.splice(index, 1);
+
+  localStorage.setItem("smartNotes", JSON.stringify(notes));
+
+  showNotes();
+}
+
+function showNotes() {
+
+  let box = document.getElementById("notes");
+
+  box.innerHTML = "";
+
+  notes.forEach(function(note, index) {
+
+    box.innerHTML += `
+      <div class="note">
+        <h3>${note.title}</h3>
+        <p>${note.content}</p>
+        <button class="delete" onclick="deleteNote(${index})">
+          Delete Note
+        </button>
+      </div>
+    `;
+
+  });
+}
+
+showNotes();
+
+</script>
+
+</body>
+</html>

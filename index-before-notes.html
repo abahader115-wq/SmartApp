@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Helper AI</title>
+
+<link rel="manifest" href="/manifest.json">
+
+<meta name="theme-color" content="#6366f1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Smart Helper">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#080b1a,#111936,#080b1a);
+  color:white;
+  min-height:100vh;
+}
+
+header{
+  height:70px;
+  padding:0 35px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(10,15,35,.9);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.logo{
+  font-size:25px;
+  font-weight:bold;
+  color:#8b8cff;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+button{
+  border:none;
+  cursor:pointer;
+}
+
+.header-btn{
+  padding:10px 16px;
+  border-radius:10px;
+  background:#202852;
+  color:white;
+}
+
+.header-btn:hover{
+  background:#303b78;
+}
+
+.logout-btn{
+  background:#ef4444;
+}
+
+.logout-btn:hover{
+  background:#dc2626;
+}
+
+.container{
+  width:92%;
+  max-width:1200px;
+  margin:45px auto;
+}
+
+.hero{
+  text-align:center;
+  margin-bottom:45px;
+}
+
+.hero h1{
+  font-size:52px;
+  background:linear-gradient(90deg,#8b8cff,#c084fc,#60a5fa);
+  -webkit-background-clip:text;
+  color:transparent;
+  margin-bottom:12px;
+}
+
+.hero p{
+  color:#aeb7d6;
+  font-size:18px;
+}
+
+.user-box{
+  margin-top:15px;
+  color:#9ca3af;
+}
+
+.tools{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.card{
+  background:rgba(24,31,64,.8);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  padding:25px;
+  transition:.25s;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  border-color:#6d72ff;
+}
+
+.card h3{
+  margin-bottom:10px;
+}
+
+.card p{
+  color:#9da7c5;
+  font-size:14px;
+  margin-bottom:18px;
+  line-height:1.5;
+}
+
+.icon{
+  font-size:34px;
+  margin-bottom:15px;
+}
+
+.main-box{
+  margin-top:30px;
+  background:rgba(18,24,52,.9);
+  padding:25px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+textarea,
+input,
+select{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #30385f;
+  background:#0c1127;
+  color:white;
+  outline:none;
+  margin-bottom:12px;
+}
+
+textarea{
+  min-height:150px;
+  resize:vertical;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+  border-color:#7377ff;
+}
+
+.primary{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  background:linear-gradient(90deg,#6366f1,#8b5cf6);
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.primary:hover{
+  opacity:.9;
+}
+
+.secondary{
+  padding:12px 18px;
+  border-radius:10px;
+  background:#242d59;
+  color:white;
+  margin-top:10px;
+}
+
+.result{
+  margin-top:20px;
+  padding:20px;
+  border-radius:15px;
+  background:#0b1024;
+  border:1px solid #252d52;
+  white-space:pre-wrap;
+  line-height:1.7;
+  min-height:50px;
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* AUTH */
+
+.auth-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.auth-box{
+  width:100%;
+  max-width:430px;
+  background:rgba(18,24,52,.95);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:25px;
+  padding:35px;
+  box-shadow:0 25px 80px rgba(0,0,0,.4);
+}
+
+.auth-box h1{
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.auth-box .subtitle{
+  text-align:center;
+  color:#9ca3af;
+  margin-bottom:25px;
+}
+
+.auth-box label{
+  display:block;
+  margin-bottom:7px;
+  color:#cbd5e1;
+}
+
+.auth-message{
+  margin-top:15px;
+  text-align:center;
+  color:#fca5a5;
+  min-height:20px;
+}
+
+.switch{
+  text-align:center;
+  margin-top:20px;
+  color:#9ca3af;
+}
+
+.switch span{
+  color:#8b8cff;
+  cursor:pointer;
+}
+
+.password-box{
+  position:relative;
+}
+
+.password-box input{
+  padding-right:60px;
+}
+
+.password-toggle{
+  position:absolute;
+  right:10px;
+  top:5px;
+  background:transparent;
+  color:#aaa;
+  padding:10px;
+}
+
+/* CHAT */
+
+.chat-window{
+  height:420px;
+  overflow-y:auto;
+  padding:10px;
+  background:#080d20;
+  border-radius:15px;
+  margin-bottom:15px;
+}
+
+.message{
+  padding:13px 16px;
+  border-radius:15px;
+  margin:10px 0;
+  max-width:80%;
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+
+.user-message{
+  background:#4f46e5;
+  margin-left:auto;
+}
+
+.ai-message{
+  background:#202746;
+  margin-right:auto;
+}
+
+.chat-input{
+  display:flex;
+  gap:10px;
+}
+
+.chat-input textarea{
+  margin:0;
+  min-height:55px;
+}
+
+.chat-input button{
+  width:130px;
+}
+
+/* HISTORY */
+
+.history-list{
+  max-height:500px;
+  overflow-y:auto;
+}
+
+.history-item{
+  background:#0c1127;
+  border:1px solid #252d52;
+  border-radius:15px;
+  padding:18px;
+  margin-bottom:15px;
+}
+
+.history-user{
+  color:#a5b4fc;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.history-ai{
+  color:#d1d5db;
+  white-space:pre-wrap;
+  line-height:1.6;
+}
+
+.history-time{
+  color:#6b7280;
+  font-size:12px;
+  margin-top:10px;
+}
+
+@media(max-width:900px){
+
+  .tools{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+
+  header{
+    padding:0 15px;
+  }
+
+  .logo{
+    font-size:19px;
+  }
+
+  .header-btn{
+    padding:8px 10px;
+  }
+
+  .hero h1{
+    font-size:38px;
+  }
+
+  .tools{
+    grid-template-columns:1fr;
+  }
+
+  .container{
+    width:94%;
+  }
+
+  .chat-input{
+    flex-direction:column;
+  }
+
+  .chat-input button{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUTH SCREEN -->
+
+<div id="authScreen" class="auth-screen">
+
+  <!-- LOGIN -->
+
+  <div id="loginBox" class="auth-box">
+
+    <h1>🤖 Smart Helper</h1>
+
+    <p class="subtitle">
+      Login to your AI assistant
+    </p>
+
+    <form onsubmit="login(event)">
+
+      <label>Email</label>
+
+      <input
+        id="loginEmail"
+        type="email"
+        placeholder="Enter your email"
+        required
+      >
+
+      <label>Password</label>
+
+      <div class="password-box">
+
+        <input
+          id="loginPassword"
+          type="password"
+          placeholder="Enter password"
+          required
+        >
+
+        <button
+          type="button"
+          class="password-toggle"
+          onclick="togglePassword('loginPassword')"
+        >
+          👁
+        </button>
+
+      </div>
+
+      <button class="primary" type="submit">
+        Login
+      </button>
+
+    </form>
+
+    <div id="loginMessage" class="auth-message"></div>
+
+    <div class="switch">
+      Don't have an account?
+      <span onclick="showSignup()">
+        Create Account
+      </span>
+    </div>
+
+  </div>
+
+
+  <!-- SIGNUP -->
+
+  <div id="signupBox" class="auth-box hidden">
+
+    <h1>✨ Create Account</h1>
+
+    <p class="subtitle">
+      Join Smart Helper AI
+    </p>
+
+    <form onsubmit="signup(event)">
+
+      <label>Name</label>
+
+      <input
+        id="signupName"
+        type="text"
+        placeholder="Your name"
+        required
+      >
+
+      <label>Email</label>
+
+      <input
+        id="signupEmail"
+        type="email"
+        placeholder="Your email"
+        required
+      >
+
+      <label>Password</label>
+
+      <div class="password-box">
+
+        <input
+          id="signupPassword"
+          type="password"
+          placeholder="Create password"
+          required
+        >
+
+        <button
+          type="button"
+          class="password-toggle"
+          onclick="togglePassword('signupPassword')"
+        >
+          👁
+        </button>
+
+      </div>
+
+      <button class="primary" type="submit">
+        Create Account
+      </button>
+
+    </form>
+
+    <div id="signupMessage" class="auth-message"></div>
+
+    <div class="switch">
+      Already have an account?
+      <span onclick="showLogin()">
+        Login
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- MAIN APP -->
+
+<div id="appScreen" class="hidden">
+
+<header>
+
+  <div class="logo">
+    🤖 Smart Helper
+  </div>
+
+  <div class="header-right">
+
+    <button
+      class="header-btn"
+      onclick="openHistory()"
+    >
+      📜 History
+    </button>
+
+    <button
+      class="header-btn logout-btn"
+      onclick="logout()"
+    >
+      Logout
+    </button>
+
+  </div>
+
+</header>
+
+
+<div class="container">
+
+  <section class="hero">
+
+    <h1>
+      Smart Helper AI
+    </h1>
+
+    <p>
+      Your everyday AI assistant
+    </p>
+
+    <div
+      id="welcomeUser"
+      class="user-box"
+    ></div>
+
+  </section>
+
+
+  <!-- TOOLS -->
+
+  <div class="tools">
+
+    <div class="card">
+
+      <div class="icon">
+        ✍️
+      </div>
+
+      <h3>
+        Rewrite
+      </h3>
+
+      <p>
+        Make your text cleaner,
+        professional and easier to understand.
+      </p>
+
+      <button
+        class="primary"
+        onclick="showTool('rewriteTool')"
+      >
+        Open Rewrite
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">
+        🌐
+      </div>
+
+      <h3>
+        Translate
+      </h3>
+
+      <p>
+        Translate your text into Urdu
+        or other languages.
+      </p>
+
+      <button
+        class="primary"
+        onclick="showTool('translateTool')"
+      >
+        Translate
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">
+        💬
+      </div>
+
+      <h3>
+        Ask AI
+      </h3>
+
+      <p>
+        Ask Smart Helper anything
+        and get an AI answer.
+      </p>
+
+      <button
+        class="primary"
+        onclick="showTool('askTool')"
+      >
+        Ask AI
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">
+        📜
+      </div>
+
+      <h3>
+        Chat History
+      </h3>
+
+      <p>
+        View your previous AI
+        questions and answers.
+      </p>
+
+      <button
+        class="primary"
+        onclick="openHistory()"
+      >
+        View History
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ASK AI -->
+
+  <div
+    id="askTool"
+    class="main-box hidden"
+  >
+
+    <h2>
+      💬 Ask Smart Helper
+    </h2>
+
+    <br>
+
+    <textarea
+      id="askInput"
+      placeholder="Ask anything..."
+    ></textarea>
+
+    <button
+      class="primary"
+      onclick="askMain()"
+    >
+      Ask AI
+    </button>
+
+    <div
+      id="askResult"
+      class="result"
+    ></div>
+
+  </div>
+
+
+  <!-- REWRITE -->
+
+  <div
+    id="rewriteTool"
+    class="main-box hidden"
+  >
+
+    <h2>
+      ✍️ Rewrite Text
+    </h2>
+
+    <br>
+
+    <textarea
+      id="rewriteInput"
+      placeholder="Enter text you want to rewrite..."
+    ></textarea>
+
+    <button
+      class="primary"
+      onclick="rewriteText()"
+    >
+      Rewrite
+    </button>
+
+    <div
+      id="rewriteResult"
+      class="result"
+    ></div>
+
+  </div>
+
+
+  <!-- TRANSLATE -->
+
+  <div
+    id="translateTool"
+    class="main-box hidden"
+  >
+
+    <h2>
+      🌐 Translate
+    </h2>
+
+    <br>
+
+    <textarea
+      id="translateInput"
+      placeholder="Enter text to translate..."
+    ></textarea>
+
+    <select id="language">
+
+      <option value="Urdu">
+        Urdu
+      </option>
+
+      <option value="English">
+        English
+      </option>
+
+      <option value="Arabic">
+        Arabic
+      </option>
+
+      <option value="French">
+        French
+      </option>
+
+      <option value="Spanish">
+        Spanish
+      </option>
+
+      <option value="German">
+        German
+      </option>
+
+    </select>
+
+    <button
+      class="primary"
+      onclick="translateText()"
+    >
+      Translate
+    </button>
+
+    <div
+      id="translateResult"
+      class="result"
+    ></div>
+
+  </div>
+
+
+  <!-- CHAT -->
+
+  <div
+    id="chatTool"
+    class="main-box hidden"
+  >
+
+    <h2>
+      💬 AI Chat
+    </h2>
+
+    <br>
+
+    <div
+      id="chatWindow"
+      class="chat-window"
+    ></div>
+
+    <div class="chat-input">
+
+      <textarea
+        id="chatInput"
+        placeholder="Type your message..."
+      ></textarea>
+
+      <button
+        class="primary"
+        onclick="sendChat()"
+      >
+        Send
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- HISTORY -->
+
+  <div
+    id="historyTool"
+    class="main-box hidden"
+  >
+
+    <h2>
+      📜 Chat History
+    </h2>
+
+    <br>
+
+    <button
+      class="secondary"
+      onclick="loadHistory()"
+    >
+      🔄 Refresh
+    </button>
+
+    <button
+      class="secondary"
+      onclick="clearHistory()"
+    >
+      🗑 Clear History
+    </button>
+
+    <br><br>
+
+    <div
+      id="historyList"
+      class="history-list"
+    >
+      Loading...
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* CURRENT USER */
+
+let currentUser = null;
+
+
+/* API */
+
+async function apiFetch(url, options = {}){
+
+  options.credentials = "include";
+
+  options.headers = {
+    "Content-Type":"application/json",
+    ...(options.headers || {})
+  };
+
+  const response =
+    await fetch(url, options);
+
+  let data = {};
+
+  try{
+    data = await response.json();
+  }catch(error){}
+
+  return {
+    response,
+    data
+  };
+}
+
+
+/* LOGIN / SIGNUP */
+
+function showLogin(){
+
+  document
+    .getElementById("loginBox")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("signupBox")
+    .classList.add("hidden");
+
+  document
+    .getElementById("loginMessage")
+    .textContent = "";
+
+  document
+    .getElementById("signupMessage")
+    .textContent = "";
+}
+
+
+function showSignup(){
+
+  document
+    .getElementById("loginBox")
+    .classList.add("hidden");
+
+  document
+    .getElementById("signupBox")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("loginMessage")
+    .textContent = "";
+
+  document
+    .getElementById("signupMessage")
+    .textContent = "";
+}
+
+
+function togglePassword(id){
+
+  const input =
+    document.getElementById(id);
+
+  input.type =
+    input.type === "password"
+      ? "text"
+      : "password";
+}
+
+
+/* SIGNUP */
+
+async function signup(event){
+
+  event.preventDefault();
+
+  const name =
+    document.getElementById("signupName")
+      .value.trim();
+
+  const email =
+    document.getElementById("signupEmail")
+      .value.trim();
+
+  const password =
+    document.getElementById("signupPassword")
+      .value;
+
+  const message =
+    document.getElementById("signupMessage");
+
+  message.style.color="#fca5a5";
+  message.textContent="Creating account...";
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/signup",{
+        method:"POST",
+        body:JSON.stringify({
+          name,
+          email,
+          password
+        })
+      });
+
+    if(!response.ok){
+
+      message.textContent =
+        data.error || "Signup failed.";
+
+      return;
+    }
+
+    message.style.color="#86efac";
+
+    message.textContent =
+      "Account created! Please login.";
+
+    document
+      .getElementById("loginEmail")
+      .value = email;
+
+    setTimeout(()=>{
+      showLogin();
+
+      document
+        .getElementById("loginEmail")
+        .value = email;
+
+    },800);
+
+  }catch(error){
+
+    message.textContent =
+      "Could not connect to server.";
+
+  }
+}
+
+
+/* LOGIN */
+
+async function login(event){
+
+  event.preventDefault();
+
+  const email =
+    document.getElementById("loginEmail")
+      .value.trim();
+
+  const password =
+    document.getElementById("loginPassword")
+      .value;
+
+  const message =
+    document.getElementById("loginMessage");
+
+  message.textContent="Logging in...";
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/login",{
+        method:"POST",
+        body:JSON.stringify({
+          email,
+          password
+        })
+      });
+
+    if(!response.ok){
+
+      message.textContent =
+        data.error || "Login failed.";
+
+      return;
+    }
+
+    currentUser=data.user;
+
+    showApp(currentUser);
+
+  }catch(error){
+
+    message.textContent =
+      "Could not connect to server.";
+
+  }
+}
+
+
+/* CHECK LOGIN */
+
+async function checkSession(){
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/me");
+
+    if(
+      response.ok &&
+      data.user
+    ){
+
+      currentUser=data.user;
+
+      showApp(currentUser);
+
+    }else{
+
+      showAuth();
+
+    }
+
+  }catch(error){
+
+    showAuth();
+
+  }
+}
+
+
+/* AUTH SCREEN */
+
+function showAuth(){
+
+  document
+    .getElementById("authScreen")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("appScreen")
+    .classList.add("hidden");
+
+  showLogin();
+}
+
+
+/* APP */
+
+function showApp(user){
+
+  currentUser=user;
+
+  document
+    .getElementById("authScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("appScreen")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("welcomeUser")
+    .textContent =
+      "Welcome, " +
+      (user.name || user.email) +
+      " 👋";
+
+  hideAllTools();
+
+  document
+    .getElementById("askTool")
+    .classList.remove("hidden");
+}
+
+
+/* LOGOUT */
+
+async function logout(){
+
+  try{
+
+    await apiFetch("/logout",{
+      method:"POST"
+    });
+
+  }catch(error){}
+
+  currentUser=null;
+
+  showAuth();
+}
+
+
+/* TOOLS */
+
+function hideAllTools(){
+
+  document
+    .querySelectorAll(".main-box")
+    .forEach(box=>{
+      box.classList.add("hidden");
+    });
+
+}
+
+
+function showTool(id){
+
+  hideAllTools();
+
+  const tool =
+    document.getElementById(id);
+
+  tool.classList.remove("hidden");
+
+  window.scrollTo({
+    top:tool.offsetTop - 80,
+    behavior:"smooth"
+  });
+}
+
+
+/* ASK AI */
+
+async function askMain(){
+
+  const input =
+    document.getElementById("askInput");
+
+  const result =
+    document.getElementById("askResult");
+
+  const question =
+    input.value.trim();
+
+  if(!question){
+
+    result.textContent =
+      "Please enter a question.";
+
+    return;
+  }
+
+  result.textContent="Thinking...";
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/ask",{
+        method:"POST",
+        body:JSON.stringify({
+          message:question
+        })
+      });
+
+    if(!response.ok){
+
+      result.textContent =
+        data.error ||
+        "Something went wrong.";
+
+      return;
+    }
+
+    result.textContent =
+      data.reply ||
+      "No answer received.";
+
+  }catch(error){
+
+    result.textContent =
+      "Could not connect to AI server.";
+
+  }
+}
+
+
+/* REWRITE */
+
+async function rewriteText(){
+
+  const input =
+    document.getElementById("rewriteInput");
+
+  const result =
+    document.getElementById("rewriteResult");
+
+  const text =
+    input.value.trim();
+
+  if(!text){
+
+    result.textContent =
+      "Please enter some text.";
+
+    return;
+  }
+
+  result.textContent="Rewriting...";
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/ask",{
+        method:"POST",
+        body:JSON.stringify({
+          message:
+            "Rewrite the following text clearly and professionally. Return only the rewritten text:\n\n"
+            + text
+        })
+      });
+
+    if(!response.ok){
+
+      result.textContent =
+        data.error ||
+        "Rewrite failed.";
+
+      return;
+    }
+
+    result.textContent =
+      data.reply ||
+      "No result.";
+
+  }catch(error){
+
+    result.textContent =
+      "Could not connect to server.";
+
+  }
+}
+
+
+/* TRANSLATE */
+
+async function translateText(){
+
+  const text =
+    document
+      .getElementById("translateInput")
+      .value.trim();
+
+  const language =
+    document
+      .getElementById("language")
+      .value;
+
+  const result =
+    document
+      .getElementById("translateResult");
+
+  if(!text){
+
+    result.textContent =
+      "Please enter text.";
+
+    return;
+  }
+
+  result.textContent="Translating...";
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/translate",{
+        method:"POST",
+        body:JSON.stringify({
+          text,
+          language
+        })
+      });
+
+    if(!response.ok){
+
+      result.textContent =
+        data.error ||
+        "Translation failed.";
+
+      return;
+    }
+
+    result.textContent =
+      data.translation ||
+      data.reply ||
+      "No translation received.";
+
+  }catch(error){
+
+    result.textContent =
+      "Could not connect to translation server.";
+
+  }
+}
+
+
+/* CHAT */
+
+async function sendChat(){
+
+  const input =
+    document.getElementById("chatInput");
+
+  const windowBox =
+    document.getElementById("chatWindow");
+
+  const message =
+    input.value.trim();
+
+  if(!message) return;
+
+  addChatMessage(
+    message,
+    "user"
+  );
+
+  input.value="";
+
+  const loading =
+    document.createElement("div");
+
+  loading.className =
+    "message ai-message";
+
+  loading.textContent="Thinking...";
+
+  windowBox.appendChild(loading);
+
+  windowBox.scrollTop =
+    windowBox.scrollHeight;
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/ask",{
+        method:"POST",
+        body:JSON.stringify({
+          message
+        })
+      });
+
+    loading.remove();
+
+    if(!response.ok){
+
+      addChatMessage(
+        data.error ||
+        "Something went wrong.",
+        "ai"
+      );
+
+      return;
+    }
+
+    addChatMessage(
+      data.reply ||
+      "No answer received.",
+      "ai"
+    );
+
+  }catch(error){
+
+    loading.remove();
+
+    addChatMessage(
+      "Could not connect to AI server.",
+      "ai"
+    );
+  }
+}
+
+
+function addChatMessage(text,type){
+
+  const windowBox =
+    document.getElementById("chatWindow");
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "message " +
+    (
+      type==="user"
+        ? "user-message"
+        : "ai-message"
+    );
+
+  div.textContent=text;
+
+  windowBox.appendChild(div);
+
+  windowBox.scrollTop =
+    windowBox.scrollHeight;
+}
+
+
+/* HISTORY */
+
+async function openHistory(){
+
+  showTool("historyTool");
+
+  await loadHistory();
+}
+
+
+async function loadHistory(){
+
+  const list =
+    document.getElementById("historyList");
+
+  list.innerHTML="Loading history...";
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/history");
+
+    if(!response.ok){
+
+      list.innerHTML =
+        "<p>Could not load history.</p>";
+
+      return;
+    }
+
+    const chats =
+      data.chats || [];
+
+    if(chats.length===0){
+
+      list.innerHTML =
+        "<p style='color:#9ca3af'>No chat history yet.</p>";
+
+      return;
+    }
+
+    list.innerHTML="";
+
+    chats.forEach(chat=>{
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "history-item";
+
+      const user =
+        document.createElement("div");
+
+      user.className =
+        "history-user";
+
+      user.textContent =
+        "You: " + chat.message;
+
+      const ai =
+        document.createElement("div");
+
+      ai.className =
+        "history-ai";
+
+      ai.textContent =
+        "AI: " + chat.reply;
+
+      const time =
+        document.createElement("div");
+
+      time.className =
+        "history-time";
+
+      time.textContent =
+        chat.created_at
+          ? new Date(
+              chat.created_at
+            ).toLocaleString()
+          : "";
+
+      item.appendChild(user);
+      item.appendChild(ai);
+      item.appendChild(time);
+
+      list.appendChild(item);
+
+    });
+
+  }catch(error){
+
+    list.innerHTML =
+      "<p>Could not connect to server.</p>";
+
+  }
+}
+
+
+/* CLEAR HISTORY */
+
+async function clearHistory(){
+
+  if(
+    !confirm(
+      "Are you sure you want to clear chat history?"
+    )
+  ){
+    return;
+  }
+
+  try{
+
+    const {response,data} =
+      await apiFetch("/history",{
+        method:"DELETE"
+      });
+
+    if(!response.ok){
+
+      alert(
+        data.error ||
+        "Could not clear history."
+      );
+
+      return;
+    }
+
+    loadHistory();
+
+  }catch(error){
+
+    alert(
+      "Could not connect to server."
+    );
+
+  }
+}
+
+
+/* CHAT ENTER */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key==="Enter" &&
+      !event.shiftKey &&
+      document.activeElement &&
+      document.activeElement.id==="chatInput"
+    ){
+
+      event.preventDefault();
+
+      sendChat();
+
+    }
+
+  }
+);
+
+
+/* PWA SERVICE WORKER */
+
+if("serviceWorker" in navigator){
+
+  window.addEventListener(
+    "load",
+    () => {
+
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(() => {
+
+          console.log(
+            "Smart Helper PWA ready"
+          );
+
+        })
+        .catch(error => {
+
+          console.log(
+            "PWA error:",
+            error
+          );
+
+        });
+
+    }
+  );
+
+}
+
+
+/* START */
+
+checkSession();
+
+</script>
+
+</body>
+</html>
