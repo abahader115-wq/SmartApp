@@ -90,6 +90,10 @@ app.use(session({
 
 }));
 
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Smart Helper AI Server running on port ${PORT}`);
+});
+
 
 app.get("/", (req, res) => {
 
