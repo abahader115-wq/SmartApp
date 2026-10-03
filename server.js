@@ -40,7 +40,7 @@ db.exec(`
 `);
 
 
-/* =========================
+/* ========================= */
    MIDDLEWARE
 ========================= */
 
@@ -793,17 +793,9 @@ app.delete(
       res.status(500).json({
         error:
           "Could not delete history"
-      });
-
-    }
-
-  }
-);
-
-
 /* =========================
    SERVER START
-========================= 
+========================= */
 
 /* =========================
    SERVER START
@@ -846,3 +838,7 @@ app.listen(
 
   }
 );
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
