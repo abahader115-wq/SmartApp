@@ -1,2708 +1,818 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Smart Helper AI</title>
-
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#6366f1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>Smart Helper</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#080b1a,#111936,#080b1a);
-color:#fff;
-min-height:100vh
-}
-
-button{border:0;cursor:pointer}
+:root{--bg:#0b1220;--panel:#131e2e;--border:#28364a;--text:#f1f5f9;--muted:#9eacc0;--green:#22c55e;--red:#ef4444;--blue:#3b82f6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,textarea,select{font:inherit}
+button{border:0;border-radius:9px;padding:11px 15px;background:var(--blue);color:white;font-weight:bold;cursor:pointer}
+button:hover{filter:brightness(1.12)}
+button:disabled{opacity:.5;cursor:wait}
+.secondary{background:#263449}
+.danger{background:#b91c1c}
+.greenbtn{background:#087d52}
 .hidden{display:none!important}
-
-header{
-height:70px;
-padding:0 25px 0 245px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:rgba(10,15,35,.95);
-border-bottom:1px solid rgba(255,255,255,.1);
-position:sticky;
-top:0;
-z-index:20
-}
-
-.logo{
-font-size:25px;
-font-weight:800;
-color:#8b8cff
-}
-
-.header-right{
-display:flex;
-align-items:center;
-gap:10px
-}
-
-.header-btn,.secondary{
-padding:10px 16px;
-border-radius:10px;
-background:#202852;
-color:#fff
-}
-
-.header-btn:hover,.secondary:hover{
-background:#303b78
-}
-
-.logout-btn{background:#ef4444}
-
-.container{
-width:92%;
-max-width:1200px;
-margin:35px auto
-}
-
-.hero{
-text-align:center;
-margin-bottom:30px
-}
-
-.hero h1{
-font-size:50px;
-background:linear-gradient(90deg,#8b8cff,#c084fc,#60a5fa);
--webkit-background-clip:text;
-color:transparent;
-margin-bottom:10px
-}
-
-.hero p{
-color:#aeb7d6;
-font-size:18px
-}
-
-.user-box{
-margin-top:12px;
-color:#9ca3af
-}
-
-/* SIDE MENU */
-
-.side-menu{
-position:fixed;
-left:0;
-top:0;
-width:220px;
-height:100vh;
-background:#0b1024;
-border-right:1px solid #252d52;
-padding:20px 12px;
-z-index:1000;
-overflow-y:auto
-}
-
-.side-menu h2{
-text-align:center;
-color:#8b8cff;
-margin-bottom:22px;
-font-size:21px
-}
-
-.side-menu button{
-width:100%;
-padding:13px 14px;
-margin:5px 0;
-border-radius:10px;
-background:#151c39;
-color:#dbe2f4;
-font-size:14px;
-font-weight:600;
-text-align:left
-}
-
-.side-menu button:hover{
-background:#4f46e5;
-color:#fff
-}
-
-.side-menu button.active{
-background:#6366f1;
-color:#fff
-}
-
-/* TOOLS */
-
-.tools{
-display:none
-}
-
-.card,.main-box{
-background:rgba(18,24,52,.92);
-border:1px solid rgba(255,255,255,.08);
-border-radius:20px;
-box-shadow:0 15px 40px rgba(0,0,0,.22)
-}
-
-.card{
-padding:23px;
-transition:.2s
-}
-
-.card:hover{
-transform:translateY(-4px);
-border-color:#6d72ff
-}
-
-.card h3{margin-bottom:9px}
-
-.card p{
-color:#9da7c5;
-font-size:14px;
-line-height:1.5;
-margin-bottom:16px
-}
-
-.icon{
-font-size:32px;
-margin-bottom:12px
-}
-
-.main-box{
-margin-top:25px;
-padding:25px
-}
-
-.main-box h2{
-margin-bottom:14px
-}
-
-textarea,input,select{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #30385f;
-background:#0c1127;
-color:#fff;
-outline:0;
-margin-bottom:12px
-}
-
-textarea{
-min-height:145px;
-resize:vertical
-}
-
-.primary{
-width:100%;
-padding:14px;
-border-radius:12px;
-background:linear-gradient(90deg,#6366f1,#8b5cf6);
-color:#fff;
-font-size:16px;
-font-weight:700
-}
-
-.result{
-margin-top:18px;
-padding:18px;
-border-radius:15px;
-background:#0b1024;
-border:1px solid #252d52;
-white-space:pre-wrap;
-line-height:1.7;
-min-height:50px
-}
-
-/* AUTH */
-
-.auth-screen{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px
-}
-
-.auth-box{
-width:100%;
-max-width:430px;
-background:rgba(18,24,52,.96);
-border:1px solid rgba(255,255,255,.1);
-border-radius:25px;
-padding:35px;
-box-shadow:0 25px 80px rgba(0,0,0,.4)
-}
-
-.auth-box h1{
-text-align:center;
-margin-bottom:8px
-}
-
-.subtitle{
-text-align:center;
-color:#9ca3af;
-margin-bottom:25px
-}
-
-.auth-box label{
-display:block;
-margin-bottom:7px;
-color:#cbd5e1
-}
-
-.auth-message{
-text-align:center;
-color:#fca5a5;
-min-height:20px;
-margin-top:14px
-}
-
-.switch{
-text-align:center;
-margin-top:18px;
-color:#9ca3af
-}
-
-.switch span{
-color:#8b8cff;
-cursor:pointer
-}
-
-.password-box{
-position:relative
-}
-
-.password-box input{
-padding-right:55px
-}
-
-.password-toggle{
-position:absolute;
-right:8px;
-top:3px;
-background:transparent;
-color:#aaa;
-padding:10px
-}
-
-/* CHAT */
-
-.chat-window{
-height:420px;
-overflow-y:auto;
-padding:10px;
-background:#080d20;
-border-radius:15px;
-margin-bottom:15px
-}
-
-.message{
-padding:13px 16px;
-border-radius:15px;
-margin:10px 0;
-max-width:80%;
-line-height:1.5;
-white-space:pre-wrap
-}
-
-.user-message{
-background:#4f46e5;
-margin-left:auto
-}
-
-.ai-message{
-background:#202746;
-margin-right:auto
-}
-
-.chat-input{
-display:flex;
-gap:10px
-}
-
-.chat-input textarea{
-margin:0;
-min-height:55px
-}
-
-.chat-input button{
-width:130px
-}
-
-/* HISTORY */
-
-.history-list{
-max-height:500px;
-overflow-y:auto
-}
-
-.history-item{
-background:#0c1127;
-border:1px solid #252d52;
-border-radius:15px;
-padding:18px;
-margin-bottom:15px
-}
-
-.history-user{
-color:#a5b4fc;
-font-weight:bold;
-margin-bottom:10px
-}
-
-.history-ai{
-color:#d1d5db;
-white-space:pre-wrap;
-line-height:1.6
-}
-
-.history-time{
-color:#6b7280;
-font-size:12px;
-margin-top:10px
-}
-
-/* CRYPTO */
-
-.crypto-top{
-display:grid;
-grid-template-columns:1.2fr 1fr;
-gap:18px
-}
-
-.coin-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-margin:15px 0
-}
-
-.coin-btn{
-padding:13px 8px;
-border-radius:12px;
-background:#111936;
-color:#cbd5e1;
-border:1px solid #30385f;
-font-weight:700
-}
-
-.coin-btn.active{
-background:#4f46e5;
-border-color:#818cf8;
-color:#fff
-}
-
-.price-card{
-padding:20px;
-border-radius:18px;
-background:linear-gradient(135deg,#111936,#202852);
-border:1px solid #39436e
-}
-
-.price-label{
-color:#9ca3af;
-font-size:13px
-}
-
-.btc-price{
-font-size:35px;
-font-weight:800;
-margin-top:5px
-}
-
-.prediction-box{
-margin-top:18px;
-padding:20px;
-border-radius:18px;
-background:#0b1024;
-border:1px solid #30385f
-}
-
-.prediction-buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin:12px 0
-}
-
-.up-btn{
-padding:14px;
-border-radius:12px;
-background:#16a34a;
-color:#fff;
-font-weight:800;
-font-size:16px
-}
-
-.down-btn{
-padding:14px;
-border-radius:12px;
-background:#dc2626;
-color:#fff;
-font-weight:800;
-font-size:16px
-}
-
-.status{
-padding:14px;
-border-radius:12px;
-background:#151c39;
-text-align:center;
-margin-top:12px;
-font-weight:800
-}
-
-.status.win{
-background:#14532d;
-color:#86efac
-}
-
-.status.lose{
-background:#7f1d1d;
-color:#fecaca
-}
-
-.status.wait{
-color:#fde68a
-}
-
-.chart-wrap{
-margin-top:15px;
-background:#070b18;
-border-radius:15px;
-border:1px solid #252d52;
-padding:10px
-}
-
-#cryptoChart{
-width:100%;
-height:280px;
-display:block
-}
-
-.demo-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-margin-top:15px
-}
-
-.stat{
-padding:16px;
-border-radius:14px;
-background:#111936;
-border:1px solid #2c355e
-}
-
-.stat small{
-color:#9ca3af
-}
-
-.stat strong{
-display:block;
-font-size:21px;
-margin-top:5px
-}
-
-.trade-form{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin-top:15px
-}
-
-.trade-form button{
-grid-column:1/-1
-}
-
-.table-wrap{
-overflow:auto;
-margin-top:15px
-}
-
-table{
-width:100%;
-border-collapse:collapse
-}
-
-th,td{
-padding:11px;
-border-bottom:1px solid #293252;
-text-align:left;
-color:#dbe2f4
-}
-
-th{
-color:#9da7c5;
-font-size:13px
-}
-
-/* LEARN */
-
-.learn-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px
-}
-
-.learn-card{
-padding:18px;
-border-radius:15px;
-background:#0c1127;
-border:1px solid #252d52
-}
-
-.learn-card h3{
-margin-bottom:8px
-}
-
-.learn-card p,.learn-card li{
-color:#b8c1d9;
-line-height:1.6;
-font-size:14px
-}
-
-.learn-card ul{
-padding-left:20px
-}
-
-/* MANGO */
-
-.support{
-border:1px solid #514b8a;
-background:linear-gradient(135deg,#17183c,#0c1127)
-}
-
-.support-address{
-font-family:monospace;
-background:#080d20;
-border:1px solid #30385f;
-padding:13px;
-border-radius:10px;
-word-break:break-all;
-color:#c4b5fd;
-margin-top:8px
-}
-
-.warning{
-font-size:13px;
-color:#fbbf24;
-line-height:1.6;
-margin-top:12px
-}
-
-/* MOBILE */
-
-@media(max-width:800px){
-
-.side-menu{
-width:100%;
-height:62px;
-padding:7px;
-display:flex;
-gap:6px;
-overflow-x:auto;
-overflow-y:hidden
-}
-
-.side-menu h2{
-display:none
-}
-
-.side-menu button{
-min-width:105px;
-margin:0;
-text-align:center;
-padding:11px 8px
-}
-
-header{
-padding:0 15px;
-margin-top:62px
-}
-
-.container{
-width:94%;
-margin:25px auto
-}
-
-.hero h1{
-font-size:38px
-}
-
-.crypto-top{
-grid-template-columns:1fr
-}
-
-.coin-grid{
-grid-template-columns:repeat(2,1fr)
-}
-
-.demo-grid,
-.learn-grid,
-.trade-form{
-grid-template-columns:1fr
-}
-
-.chat-input{
-flex-direction:column
-}
-
-.chat-input button{
-width:100%
-}
-
-}
-
-/* DESKTOP APP SPACE */
-
-@media(min-width:801px){
-#app{
-padding-left:220px
-}
+header{background:#101a2a;border-bottom:1px solid var(--border);padding:14px 4%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-size:23px;font-weight:bold;letter-spacing:-.5px}
+.nav{display:flex;gap:7px;flex-wrap:wrap}
+.nav button{font-size:13px;padding:10px 12px}
+main{width:min(1150px,94%);margin:24px auto;min-height:70vh}
+h1{font-size:30px;margin:20px 0 8px}
+h2{font-size:21px}
+h3{font-size:17px}
+p{line-height:1.55}
+.muted{color:var(--muted);line-height:1.6}
+.small{font-size:12px}
+.panel,.card{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:19px;margin:15px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px}
+.card p{color:var(--muted)}
+.card button{width:100%}
+input,textarea,select{display:block;width:100%;padding:13px;background:#0b1423;color:white;border:1px solid #34445a;border-radius:9px;margin:8px 0 16px}
+textarea{min-height:145px;resize:vertical}
+label{font-size:14px;font-weight:bold}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.row>*{flex:1}
+.result{white-space:pre-wrap;overflow-wrap:anywhere;background:#0a1322;border-radius:9px;padding:15px;margin-top:14px;line-height:1.65;min-height:42px}
+a{color:#93c5fd}
+footer{text-align:center;padding:25px;color:var(--muted)}
+.price{font-size:clamp(29px,5vw,43px);font-weight:bold;letter-spacing:-1px}
+.positive{color:var(--green)!important}
+.negative{color:var(--red)!important}
+.pill{display:inline-block;border-radius:8px;padding:8px 12px;font-weight:bold;font-size:13px}
+.up{background:#123c2b;color:#4ade80}
+.down{background:#471e27;color:#fca5a5}
+.flat{background:#273449;color:#cbd5e1}
+.market-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.coin-symbol{display:flex;align-items:center;gap:12px}
+.coin-icon{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#f7931a;color:white;font-size:25px;font-weight:bold}
+.stat{background:#0c1727;padding:15px;border-radius:10px}
+.stat-label{color:var(--muted);font-size:13px}
+.stat-value{font-size:19px;font-weight:bold;margin-top:8px;overflow-wrap:anywhere}
+.chart-wrap{height:310px;width:100%;position:relative}
+#btcChart{display:block;width:100%;height:310px}
+.chart-buttons{display:flex;gap:7px;flex-wrap:wrap}
+.chart-buttons button{padding:9px 14px}
+.chart-buttons .selected{background:#14532d;color:#86efac}
+.trade-balance{font-size:25px;font-weight:bold}
+.history-item{padding:13px 0;border-bottom:1px solid var(--border);overflow-wrap:anywhere}
+.history-item time{color:var(--muted);font-size:12px}
+footer{font-size:13px}
+@media(max-width:600px){
+ header{align-items:flex-start;flex-direction:column}
+ .nav{width:100%}
+ .nav button{flex:1}
+ main{width:94%;margin-top:15px}
+ .panel{padding:14px}
+ .chart-wrap,#btcChart{height:260px}
+ .price{font-size:30px}
 }
 </style>
 </head>
-
 <body>
 
-<!-- AUTH -->
-
-<div id="authScreen" class="auth-screen">
-
-<div id="loginBox" class="auth-box">
-
-<h1>🤖 Smart Helper</h1>
-<p class="subtitle">Login to your AI assistant</p>
-
-<form onsubmit="login(event)">
-
-<label>Email</label>
-
-<input
-id="loginEmail"
-type="email"
-placeholder="Enter your email"
-required
->
-
-<label>Password</label>
-
-<div class="password-box">
-
-<input
-id="loginPassword"
-type="password"
-placeholder="Enter password"
-required
->
-
-<button
-type="button"
-class="password-toggle"
-onclick="togglePassword('loginPassword')"
->👁</button>
-
-</div>
-
-<button class="primary">Login</button>
-
-<div id="loginMessage" class="auth-message"></div>
-
-</form>
-
-<div class="switch">
-Don't have an account?
-<span onclick="showSignup()">Create account</span>
-</div>
-
-</div>
-
-
-<div id="signupBox" class="auth-box hidden">
-
-<h1>🧠 Create Account</h1>
-
-<p class="subtitle">Start using Smart Helper</p>
-
-<form onsubmit="signup(event)">
-
-<label>Name</label>
-
-<input
-id="signupName"
-type="text"
-placeholder="Your name"
-required
->
-
-<label>Email</label>
-
-<input
-id="signupEmail"
-type="email"
-placeholder="Your email"
-required
->
-
-<label>Password</label>
-
-<div class="password-box">
-
-<input
-id="signupPassword"
-type="password"
-placeholder="Create password"
-required
->
-
-<button
-type="button"
-class="password-toggle"
-onclick="togglePassword('signupPassword')"
->👁</button>
-
-</div>
-
-<button class="primary">Create Account</button>
-
-<div id="signupMessage" class="auth-message"></div>
-
-</form>
-
-<div class="switch">
-Already have an account?
-<span onclick="showLogin()">Login</span>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- APP -->
-
-<div id="app" class="hidden">
-
-
-<!-- SIDE MENU -->
-
-<div class="side-menu">
-
-<h2>🤖 Smart Helper</h2>
-
-<button onclick="showTool('askTool',this)">
-🤖 Ask AI
-</button>
-
-<button onclick="showTool('rewriteTool',this)">
-✍️ Rewrite
-</button>
-
-<button onclick="showTool('translateTool',this)">
-🌍 Translate
-</button>
-
-<button onclick="showTool('chatTool',this)">
-💬 AI Chat
-</button>
-
-<button onclick="showTool('historyTool',this);loadHistory()">
-📜 History
-</button>
-
-<button onclick="showTool('cryptoTool',this)">
-₿ Crypto
-</button>
-
-<button onclick="showTool('learnTool',this)">
-📚 Learn Crypto
-</button>
-
-<button onclick="showTool('mangoTool',this)">
-🥭 Mango
-</button>
-
-</div>
-
-
 <header>
-
-<div class="logo">
-🤖 Smart Helper AI
-</div>
-
-<div class="header-right">
-
-<span id="headerUser" class="user-box"></span>
-
-<button
-class="header-btn logout-btn"
-onclick="logout()"
->
-Logout
-</button>
-
-</div>
-
+  <div class="logo">🤖 Smart Helper</div>
+  <nav class="nav">
+    <button class="secondary" onclick="goHome()">Home</button>
+    <button class="secondary" onclick="openPage('crypto')">Crypto</button>
+    <button class="secondary" onclick="openPage('history')">History</button>
+    <button class="danger hidden" id="logoutBtn" onclick="logout()">Logout</button>
+  </nav>
 </header>
 
+<main>
 
-<div class="container">
+<!-- LOGIN / SIGNUP -->
+<section id="authPage">
+  <h1>Welcome to Smart Helper</h1>
+  <p class="muted">Your everyday AI assistant.</p>
+  <div class="panel">
+    <div class="row">
+      <button id="loginTab" onclick="setAuthMode('login')">Login</button>
+      <button class="secondary" id="signupTab" onclick="setAuthMode('signup')">Create Account</button>
+    </div>
+    <div id="nameWrap" class="hidden">
+      <label for="authName">Your name</label>
+      <input id="authName" placeholder="Enter your name" autocomplete="name">
+    </div>
+    <label for="authEmail">Email</label>
+    <input id="authEmail" type="email" placeholder="Email address" autocomplete="email">
+    <label for="authPassword">Password</label>
+    <input id="authPassword" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="authSubmit" onclick="submitAuth()">Login</button>
+    <div id="authResult" class="result" aria-live="polite"></div>
+  </div>
+</section>
 
+<!-- HOME -->
+<section id="homePage" class="hidden">
+  <h1>Your Everyday AI Assistant</h1>
+  <p id="welcomeText" class="muted"></p>
+  <div class="grid">
+    <div class="card"><h2>🤖 Ask AI</h2><p>Ask questions and get helpful answers.</p><button onclick="openPage('ask')">Open Ask AI</button></div>
+    <div class="card"><h2>🌍 Translate</h2><p>Translate text into different languages.</p><button onclick="openPage('translate')">Open Translate</button></div>
+    <div class="card"><h2>✍️ Rewrite</h2><p>Improve your writing with AI.</p><button onclick="openPage('rewrite')">Open Rewrite</button></div>
+    <div class="card"><h2>📝 Notes</h2><p>Write and save notes on this device.</p><button onclick="openPage('notes')">Open Notes</button></div>
+    <div class="card"><h2>₿ Crypto</h2><p>Live Bitcoin price, market chart and trend.</p><button onclick="openPage('crypto')">Open Crypto Market</button></div>
+    <div class="card"><h2>📜 History</h2><p>Review your saved AI and Rewrite history.</p><button onclick="openPage('history')">Open History</button></div>
+  </div>
+</section>
 
-<div class="hero">
-
-<h1>Smart Helper AI</h1>
-
-<p>
-Your everyday AI assistant — Chat, Rewrite, Translate, Crypto Demo & Learn.
-</p>
-
-<div
-id="welcomeUser"
-class="user-box"
-></div>
-
-</div>
-
-
-<!-- ASK -->
-
-<div id="askTool" class="main-box">
-
-<h2>✨ Ask AI</h2>
-
-<textarea
-id="message"
-placeholder="Ask anything..."
-></textarea>
-
-<button
-class="primary"
-onclick="askAI()"
->
-Ask Smart Helper
-</button>
-
-<div
-id="askResult"
-class="result"
-></div>
-
-</div>
-
-
-<!-- REWRITE -->
-
-<div id="rewriteTool" class="main-box hidden">
-
-<h2>✍️ Rewrite</h2>
-
-<textarea
-id="rewriteText"
-placeholder="Paste text to rewrite..."
-></textarea>
-
-<button
-class="primary"
-onclick="rewriteText()"
->
-Rewrite
-</button>
-
-<div
-id="rewriteResult"
-class="result"
-></div>
-
-</div>
-
+<!-- ASK AI -->
+<section id="askPage" class="hidden">
+  <button class="secondary" onclick="goHome()">← Home</button>
+  <h1>🤖 Ask AI</h1>
+  <div class="panel">
+    <label for="askInput">Your question</label>
+    <textarea id="askInput" placeholder="Ask anything..."></textarea>
+    <button onclick="runAI()">Ask AI</button>
+    <div id="askResult" class="result" aria-live="polite"></div>
+  </div>
+</section>
 
 <!-- TRANSLATE -->
+<section id="translatePage" class="hidden">
+  <button class="secondary" onclick="goHome()">← Home</button>
+  <h1>🌍 Translator</h1>
+  <div class="panel">
+    <label for="translateInput">Text to translate</label>
+    <textarea id="translateInput" placeholder="Enter your text..."></textarea>
+    <label for="languageSelect">Translate into</label>
+    <select id="languageSelect"></select>
+    <button onclick="runTranslation()">Translate Text</button>
+    <div id="translateResult" class="result" aria-live="polite"></div>
+  </div>
+</section>
 
-<div id="translateTool" class="main-box hidden">
+<!-- REWRITE -->
+<section id="rewritePage" class="hidden">
+  <button class="secondary" onclick="goHome()">← Home</button>
+  <h1>✍️ Rewrite</h1>
+  <div class="panel">
+    <label for="rewriteInput">Your text</label>
+    <textarea id="rewriteInput" placeholder="Paste text to improve..."></textarea>
+    <button onclick="runRewrite()">Rewrite Text</button>
+    <div id="rewriteResult" class="result" aria-live="polite"></div>
+  </div>
+</section>
 
-<h2>🌍 Translate</h2>
+<!-- NOTES -->
+<section id="notesPage" class="hidden">
+  <button class="secondary" onclick="goHome()">← Home</button>
+  <h1>📝 My Notes</h1>
+  <div class="panel">
+    <p class="muted">Notes are saved in this browser on this device.</p>
+    <textarea id="notesInput" style="min-height:250px" placeholder="Write your notes..."></textarea>
+    <div class="row">
+      <button onclick="saveNotes()">Save Notes</button>
+      <button class="danger" onclick="clearNotes()">Clear Notes</button>
+    </div>
+    <div id="notesResult" class="result"></div>
+  </div>
+</section>
 
-<textarea
-id="translateTextInput"
-placeholder="Enter text..."
-></textarea>
+<!-- CRYPTO DASHBOARD -->
+<section id="cryptoPage" class="hidden">
+  <div class="market-head">
+    <div>
+      <p class="muted">SMART HELPER / MARKETS</p>
+      <h1>Crypto Market</h1>
+      <p class="muted">Live Bitcoin market overview</p>
+    </div>
+    <button class="secondary" onclick="loadCryptoPrice()">↻ Refresh</button>
+  </div>
 
-<select id="language">
+  <div class="panel">
+    <div class="market-head">
+      <div class="coin-symbol">
+        <div class="coin-icon">₿</div>
+        <div>
+          <h2 style="margin:0">Bitcoin</h2>
+          <p class="muted" style="margin:5px 0">BTC / USD</p>
+        </div>
+      </div>
+      <div id="btcTrend" class="pill flat">Loading market...</div>
+    </div>
 
-<option>Urdu</option>
-<option>English</option>
-<option>Arabic</option>
-<option>French</option>
-<option>Spanish</option>
-<option>German</option>
+    <div style="margin-top:25px">
+      <div id="btcPrice" class="price">Loading price...</div>
+      <p id="btcChange" class="muted">Fetching 24h change...</p>
+      <p id="btcUpdated" class="muted small">Connecting to market data...</p>
+    </div>
 
-</select>
+    <div class="grid" style="margin-top:22px">
+      <div class="stat"><div class="stat-label">24h High</div><div class="stat-value" id="btcHigh">—</div></div>
+      <div class="stat"><div class="stat-label">24h Low</div><div class="stat-value" id="btcLow">—</div></div>
+      <div class="stat"><div class="stat-label">Market Cap</div><div class="stat-value" id="btcCap">—</div></div>
+      <div class="stat"><div class="stat-label">24h Volume</div><div class="stat-value" id="btcVolume">—</div></div>
+    </div>
+  </div>
 
-<button
-class="primary"
-onclick="translateText()"
->
-Translate
-</button>
+  <div class="panel">
+    <div class="market-head">
+      <h2>BTC / USD Chart</h2>
+      <div class="chart-buttons">
+        <button id="chart1" class="selected" onclick="loadCryptoChart('1')">24H</button>
+        <button id="chart7" class="secondary" onclick="loadCryptoChart('7')">7D</button>
+        <button id="chart30" class="secondary" onclick="loadCryptoChart('30')">30D</button>
+      </div>
+    </div>
+    <div id="cryptoChartStatus" class="muted small">Loading price chart...</div>
+    <div class="chart-wrap"><canvas id="btcChart"></canvas></div>
+    <p class="muted small">Green means the selected period's price rose overall; red means it fell. Past performance does not predict future prices.</p>
+  </div>
 
-<div
-id="translateResult"
-class="result"
-></div>
+  <div class="panel">
+    <h2>Quick Trade — Demo Only</h2>
+    <p class="muted">Practice with virtual funds. This does not place real orders or transfer cryptocurrency.</p>
+    <div class="grid">
+      <div class="stat"><div class="stat-label">Demo USD Balance</div><div class="trade-balance" id="demoBalance">$10,000.00</div></div>
+      <div class="stat"><div class="stat-label">Demo BTC Holdings</div><div class="trade-balance" id="demoBTC">0 BTC</div></div>
+    </div>
+    <label for="tradeAmount">Amount in USD</label>
+    <input id="tradeAmount" type="number" min="0.01" step="0.01" placeholder="Example: 100">
+    <p>Estimated BTC: <strong id="estimatedBTC">—</strong></p>
+    <div class="row">
+      <button class="greenbtn" onclick="placeDemoTrade('BUY')">Buy BTC (Demo)</button>
+      <button class="danger" onclick="placeDemoTrade('SELL')">Sell BTC (Demo)</button>
+    </div>
+    <div id="tradeMessage" class="result" aria-live="polite"></div>
+    <h3>Demo Trade History</h3>
+    <div id="demoTradeHistory" class="muted">No demo trades yet.</div>
+  </div>
 
-</div>
-
-
-<!-- CHAT -->
-
-<div id="chatTool" class="main-box hidden">
-
-<h2>💬 AI Chat</h2>
-
-<div
-id="chatWindow"
-class="chat-window"
-></div>
-
-<div class="chat-input">
-
-<textarea
-id="chatInput"
-placeholder="Type your message..."
-></textarea>
-
-<button
-class="primary"
-onclick="sendChat()"
->
-Send
-</button>
-
-</div>
-
-</div>
-
+  <div class="panel">
+    <h2>Get a Crypto Wallet</h2>
+    <p class="muted">Use the official Trust Wallet website to find its mobile app and supported download options.</p>
+    <p><a href="https://trustwallet.com/download" target="_blank" rel="noopener noreferrer">📲 Download Trust Wallet — Official Website ↗</a></p>
+    <p><a href="https://trustwallet.com/bitcoin-wallet" target="_blank" rel="noopener noreferrer">₿ Trust Wallet Bitcoin Information ↗</a></p>
+    <p><a href="https://www.coingecko.com/en/coins/bitcoin" target="_blank" rel="noopener noreferrer">📈 More Bitcoin Market Data ↗</a></p>
+    <p class="muted small">Smart Helper does not sell cryptocurrency. Check local rules and eligibility before using any financial service. Never share your wallet recovery phrase.</p>
+  </div>
+</section>
 
 <!-- HISTORY -->
-
-<div id="historyTool" class="main-box hidden">
-
-<h2>📜 Chat History</h2>
-
-<button
-class="secondary"
-onclick="loadHistory()"
->
-🔄 Refresh
-</button>
-
-<button
-class="secondary"
-onclick="clearHistory()"
->
-🗑 Clear History
-</button>
-
-<div
-id="historyList"
-class="history-list"
-style="margin-top:18px"
->
-Loading...
-</div>
-
-</div>
-
-
-<!-- CRYPTO -->
-
-<div id="cryptoTool" class="main-box hidden">
-
-<h2>₿ Crypto Demo / Paper Trading</h2>
-
-<p style="color:#aeb7d6;line-height:1.6">
-This is a simulated demo. No real deposits, withdrawals or real-money trades are made here.
-</p>
-
-
-<div class="crypto-top">
-
-
-<div>
-
-<div class="coin-grid">
-
-<button
-class="coin-btn active"
-data-coin="BTC"
-onclick="selectCrypto('BTC')"
->
-₿ BTC
-</button>
-
-<button
-class="coin-btn"
-data-coin="ETH"
-onclick="selectCrypto('ETH')"
->
-♦ ETH
-</button>
-
-<button
-class="coin-btn"
-data-coin="SOL"
-onclick="selectCrypto('SOL')"
->
-◎ SOL
-</button>
-
-<button
-class="coin-btn"
-data-coin="XRP"
-onclick="selectCrypto('XRP')"
->
-✕ XRP
-</button>
-
-</div>
-
-
-<div class="price-card">
-
-<div
-class="price-label"
-id="selectedCoinLabel"
->
-Bitcoin (BTC)
-</div>
-
-<div
-class="btc-price"
-id="selectedPrice"
->
-$65,000.00
-</div>
-
-<div
-id="priceChange"
-style="color:#86efac;margin-top:5px"
->
-Simulated live movement
-</div>
-
-</div>
-
-
-<div class="prediction-box">
-
-<h3>UP / DOWN Demo</h3>
-
-<p
-style="color:#aeb7d6;margin-top:6px;line-height:1.5"
->
-Press UP or DOWN. The current price becomes the entry line.
-</p>
-
-<div class="prediction-buttons">
-
-<button
-class="up-btn"
-onclick="startPrediction('UP')"
->
-⬆ UP
-</button>
-
-<button
-class="down-btn"
-onclick="startPrediction('DOWN')"
->
-⬇ DOWN
-</button>
-
-</div>
-
-
-<div
-id="predictionStatus"
-class="status wait"
->
-No prediction active
-</div>
-
-<div
-id="entryInfo"
-style="color:#9ca3af;text-align:center;margin-top:10px"
->
-Entry line: —
-</div>
-
-
-<div class="chart-wrap">
-
-<canvas id="cryptoChart"></canvas>
-
-</div>
-
-
-<button
-class="secondary"
-onclick="stopPrediction()"
-style="width:100%"
->
-Stop Prediction
-</button>
-
-</div>
-
-</div>
-
-
-<div>
-
-
-<div class="demo-grid">
-
-<div class="stat">
-
-<small>Demo Balance</small>
-
-<strong id="demoBalance">
-$10,000.00
-</strong>
-
-</div>
-
-
-<div class="stat">
-
-<small>Portfolio Value</small>
-
-<strong id="portfolioValue">
-$10,000.00
-</strong>
-
-</div>
-
-
-<div class="stat">
-
-<small>Bitcoin Price</small>
-
-<strong id="btcNumber">
-$65,000.00
-</strong>
-
-</div>
-
-</div>
-
-
-<div class="prediction-box">
-
-<h3>Demo Buy / Sell</h3>
-
-<div class="trade-form">
-
-<select id="tradeSide">
-
-<option value="BUY">BUY</option>
-
-<option value="SELL">SELL</option>
-
-</select>
-
-<input
-id="tradeAmount"
-type="number"
-min="0.000001"
-step="0.000001"
-placeholder="Coin amount"
->
-
-<button
-class="primary"
-onclick="executeTrade()"
->
-Execute Demo Trade
-</button>
-
-</div>
-
-<div
-id="tradeMessage"
-class="result"
-></div>
-
-</div>
-
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Coin</th>
-<th>Quantity</th>
-<th>Current Value</th>
-
-</tr>
-
-</thead>
-
-<tbody id="holdingsBody"></tbody>
-
-</table>
-
-</div>
-
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Time</th>
-<th>Side</th>
-<th>Coin</th>
-<th>Amount</th>
-<th>Price</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tradesBody"></tbody>
-
-</table>
-
-</div>
-
-
-<button
-class="secondary"
-onclick="resetCryptoDemo()"
->
-Reset Demo
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- LEARN -->
-
-<div id="learnTool" class="main-box hidden">
-
-<h2>📚 Learn Crypto</h2>
-
-<div class="learn-grid">
-
-
-<div class="learn-card">
-
-<h3>What is Bitcoin?</h3>
-
-<p>
-Bitcoin is a digital asset that uses a blockchain network to record transactions.
-Its market price can move up and down quickly.
-</p>
-
-</div>
-
-
-<div class="learn-card">
-
-<h3>What is an entry line?</h3>
-
-<p>
-In this demo, your entry line is the selected price at the moment you press UP or DOWN.
-It is a visual learning tool, not a real trading order.
-</p>
-
-</div>
-
-
-<div class="learn-card">
-
-<h3>UP / DOWN result</h3>
-
-<ul>
-
-<li>UP: above entry = WIN.</li>
-
-<li>UP: below entry = LOSE.</li>
-
-<li>DOWN: below entry = WIN.</li>
-
-<li>DOWN: above entry = LOSE.</li>
-
-<li>Same price = WAIT.</li>
-
-</ul>
-
-</div>
-
-
-<div class="learn-card">
-
-<h3>Risk basics</h3>
-
-<p>
-Crypto prices are volatile. Never assume a price must go up or down.
-This app uses simulated prices and demo balance only.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- MANGO -->
-
-<div
-id="mangoTool"
-class="main-box support hidden"
->
-
-<h2>🥭 Mango — Support the Project</h2>
-
-<p
-style="color:#cbd5e1;line-height:1.7;margin-bottom:15px"
->
-If you want to support the project, you can send a contribution using one of the options below.
-The Crypto Demo does not use real deposits.
-</p>
-
-
-<h3>₿ Bitcoin</h3>
-
-<div class="support-address">
-bc1q9v25xjzkz9vvhgl69sttlucfm0acagvm8utv2dv4ysgeke33wgrq3djv60
-</div>
-
-
-<h3 style="margin-top:18px">
-📱 JazzCash
-</h3>
-
-<div class="support-address">
-03027183425
-</div>
-
-
-<div class="warning">
-⚠️ Before sending any payment, verify the address/number yourself.
-The app does not automatically receive, track, or confirm payments.
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-
+<section id="historyPage" class="hidden">
+  <button class="secondary" onclick="goHome()">← Home</button>
+  <h1>📜 History</h1>
+  <p class="muted">Your saved Ask AI and Rewrite conversations.</p>
+  <div class="row">
+    <button onclick="loadHistory()">Refresh History</button>
+    <button class="danger" onclick="clearHistory()">Clear History</button>
+  </div>
+  <div id="historyResult" class="panel">Loading history...</div>
+</section>
+
+</main>
+<footer>Smart Helper © 2026</footer>
 
 <script>
+"use strict";
 
-let currentUser=null;
+let currentUser = null;
+let authMode = "login";
+let btcChartValues = [];
+let btcChartDays = "1";
+let currentBTCPrice = 0;
+let marketRequest = 0;
+let chartRequest = 0;
 
+const pages = {
+  auth:"authPage",
+  home:"homePage",
+  ask:"askPage",
+  translate:"translatePage",
+  rewrite:"rewritePage",
+  notes:"notesPage",
+  crypto:"cryptoPage",
+  history:"historyPage"
+};
 
-/* API */
+const languages = [
+"Afrikaans","Albanian","Amharic","Arabic","Armenian","Assamese",
+"Azerbaijani","Basque","Belarusian","Bengali","Bosnian","Bulgarian",
+"Burmese","Catalan","Chinese (Simplified)","Chinese (Traditional)",
+"Croatian","Czech","Danish","Dari","Dutch","English","Estonian",
+"Filipino","Finnish","French","Galician","Georgian","German","Greek",
+"Gujarati","Haitian Creole","Hausa","Hebrew","Hindi","Hungarian",
+"Icelandic","Igbo","Indonesian","Irish","Italian","Japanese","Javanese",
+"Kannada","Kazakh","Khmer","Kinyarwanda","Korean","Kurdish","Kyrgyz",
+"Lao","Latvian","Lithuanian","Luxembourgish","Macedonian","Malagasy",
+"Malay","Malayalam","Maltese","Maori","Marathi","Mongolian","Nepali",
+"Norwegian","Odia","Pashto","Persian (Farsi)","Polish","Portuguese",
+"Punjabi","Romanian","Russian","Samoan","Serbian","Sesotho","Sinhala",
+"Slovak","Slovenian","Somali","Spanish","Sundanese","Swahili","Swedish",
+"Tajik","Tamil","Telugu","Thai","Tigrinya","Turkish","Turkmen",
+"Ukrainian","Urdu","Uyghur","Uzbek","Vietnamese","Welsh","Xhosa",
+"Yoruba","Zulu"
+];
+
+function initLanguages(){
+  const select=document.getElementById("languageSelect");
+  languages.sort((a,b)=>a.localeCompare(b)).forEach(language=>{
+    const option=document.createElement("option");
+    option.value=language;
+    option.textContent=language;
+    select.appendChild(option);
+  });
+  select.value="Urdu";
+}
+
+function showPage(page){
+  Object.values(pages).forEach(id=>{
+    document.getElementById(id).classList.add("hidden");
+  });
+  document.getElementById(pages[page]).classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function goHome(){
+  showPage(currentUser?"home":"auth");
+}
+
+function openPage(page){
+  if(!currentUser){
+    showPage("auth");
+    document.getElementById("authResult").textContent="Please log in first.";
+    return;
+  }
+  showPage(page);
+  if(page==="history")loadHistory();
+  if(page==="notes")loadNotes();
+  if(page==="crypto"){
+    loadCryptoPrice();
+    updateDemoSummary();
+  }
+}
+
+function setAuthMode(mode){
+  authMode=mode;
+  const signup=mode==="signup";
+  document.getElementById("nameWrap").classList.toggle("hidden",!signup);
+  document.getElementById("authSubmit").textContent=signup?"Create Account":"Login";
+  document.getElementById("loginTab").classList.toggle("secondary",signup);
+  document.getElementById("signupTab").classList.toggle("secondary",!signup);
+  document.getElementById("authResult").textContent="";
+  document.getElementById("authPassword").autocomplete=signup?"new-password":"current-password";
+}
 
 async function apiFetch(url,options={}){
-
-options.credentials="include";
-
-options.headers={
-"Content-Type":"application/json",
-...(options.headers||{})
-};
-
-const response=await fetch(url,options);
-
-let data={};
-
-try{
-data=await response.json();
-}catch(e){}
-
-return {response,data};
-
+  const response=await fetch(url,{
+    credentials:"same-origin",
+    ...options,
+    headers:{
+      "Content-Type":"application/json",
+      ...(options.headers||{})
+    }
+  });
+  const data=await response.json().catch(()=>({}));
+  return {response,data};
 }
 
+async function submitAuth(){
+  const result=document.getElementById("authResult");
+  const name=document.getElementById("authName").value.trim();
+  const email=document.getElementById("authEmail").value.trim();
+  const password=document.getElementById("authPassword").value;
 
-/* AUTH */
+  if(!email||!password||(authMode==="signup"&&!name)){
+    result.textContent="Please complete all required fields.";
+    return;
+  }
+  if(authMode==="signup"&&password.length<6){
+    result.textContent="Password must be at least 6 characters.";
+    return;
+  }
 
-function showLogin(){
-
-document
-.getElementById("loginBox")
-.classList.remove("hidden");
-
-document
-.getElementById("signupBox")
-.classList.add("hidden");
-
+  result.textContent="Please wait...";
+  try{
+    const {response,data}=await apiFetch(
+      authMode==="signup"?"/signup":"/login",
+      {method:"POST",body:JSON.stringify({name,email,password})}
+    );
+    if(!response.ok){
+      result.textContent=data.error||data.message||"Authentication failed.";
+      return;
+    }
+    currentUser=data.user||null;
+    if(!currentUser){
+      result.textContent=data.message||"Signed in, but user details were not returned.";
+      await checkSession();
+      return;
+    }
+    updateLoggedInUI();
+    showPage("home");
+  }catch(error){
+    console.error(error);
+    result.textContent="Could not connect to the server. Make sure the app server is running.";
+  }
 }
 
-function showSignup(){
-
-document
-.getElementById("loginBox")
-.classList.add("hidden");
-
-document
-.getElementById("signupBox")
-.classList.remove("hidden");
-
+function updateLoggedInUI(){
+  document.getElementById("welcomeText").textContent=
+    currentUser?"Welcome, "+(currentUser.name||currentUser.email||"User")+"!":"";
+  document.getElementById("logoutBtn").classList.toggle("hidden",!currentUser);
 }
-
-function togglePassword(id){
-
-const x=document.getElementById(id);
-
-x.type=
-x.type==="password"
-?"text"
-:"password";
-
-}
-
-
-/* SIGNUP */
-
-async function signup(e){
-
-e.preventDefault();
-
-const msg=document.getElementById("signupMessage");
-
-msg.textContent="Creating account...";
-
-try{
-
-const {response,data}=await apiFetch(
-"/signup",
-{
-method:"POST",
-body:JSON.stringify({
-name:document.getElementById("signupName").value.trim(),
-email:document.getElementById("signupEmail").value.trim(),
-password:document.getElementById("signupPassword").value
-})
-}
-);
-
-if(!response.ok){
-
-msg.textContent=data.error||"Signup failed.";
-
-return;
-
-}
-
-msg.style.color="#86efac";
-
-msg.textContent="Account created! Please login.";
-
-document.getElementById("loginEmail").value=
-document.getElementById("signupEmail").value.trim();
-
-setTimeout(showLogin,700);
-
-}catch(err){
-
-msg.textContent="Could not connect to server.";
-
-}
-
-}
-
-
-/* LOGIN */
-
-async function login(e){
-
-e.preventDefault();
-
-const msg=document.getElementById("loginMessage");
-
-msg.textContent="Logging in...";
-
-try{
-
-const {response,data}=await apiFetch(
-"/login",
-{
-method:"POST",
-body:JSON.stringify({
-email:document.getElementById("loginEmail").value.trim(),
-password:document.getElementById("loginPassword").value
-})
-}
-);
-
-if(!response.ok){
-
-msg.textContent=data.error||"Login failed.";
-
-return;
-
-}
-
-currentUser=data.user||null;
-
-openApp();
-
-}catch(err){
-
-msg.textContent="Could not connect to server.";
-
-}
-
-}
-
-
-/* LOGOUT */
-
-async function logout(){
-
-try{
-
-await apiFetch(
-"/logout",
-{
-method:"POST"
-}
-);
-
-}catch(e){}
-
-location.reload();
-
-}
-
-
-/* SESSION */
 
 async function checkSession(){
-
-try{
-
-const {response,data}=await apiFetch("/me");
-
-if(response.ok&&data.user){
-
-currentUser=data.user;
-
-openApp();
-
-}else{
-
-document
-.getElementById("authScreen")
-.classList.remove("hidden");
-
+  try{
+    const {response,data}=await apiFetch("/me");
+    if(response.ok&&data.loggedIn){
+      currentUser=data.user;
+      updateLoggedInUI();
+      showPage("home");
+    }else{
+      currentUser=null;
+      updateLoggedInUI();
+      showPage("auth");
+    }
+  }catch(error){
+    console.error(error);
+    showPage("auth");
+  }
 }
 
-}catch(e){
-
-document
-.getElementById("authScreen")
-.classList.remove("hidden");
-
+async function logout(){
+  try{
+    await apiFetch("/logout",{method:"POST",body:JSON.stringify({})});
+  }catch(error){
+    console.error(error);
+  }
+  currentUser=null;
+  updateLoggedInUI();
+  showPage("auth");
+  document.getElementById("authResult").textContent="You have logged out.";
 }
 
+async function runAI(){
+  const message=document.getElementById("askInput").value.trim();
+  const result=document.getElementById("askResult");
+  if(!message){result.textContent="Please enter a question.";return;}
+  result.textContent="Thinking...";
+  try{
+    const {response,data}=await apiFetch("/ask",{
+      method:"POST",body:JSON.stringify({message})
+    });
+    result.textContent=response.ok?(data.reply||data.answer||"No answer received."):(data.error||"AI request failed.");
+  }catch(error){
+    console.error(error);
+    result.textContent="Could not connect to the server.";
+  }
 }
 
-
-/* OPEN APP */
-
-function openApp(){
-
-document
-.getElementById("authScreen")
-.classList.add("hidden");
-
-document
-.getElementById("app")
-.classList.remove("hidden");
-
-const name=
-currentUser?.name||
-currentUser?.email||
-"User";
-
-document.getElementById("headerUser").textContent=name;
-
-document.getElementById("welcomeUser").textContent=
-"Welcome, "+name+" 👋";
-
-showTool("askTool");
-
+async function runTranslation(){
+  const text=document.getElementById("translateInput").value.trim();
+  const language=document.getElementById("languageSelect").value;
+  const result=document.getElementById("translateResult");
+  if(!text){result.textContent="Please enter text to translate.";return;}
+  result.textContent="Translating...";
+  try{
+    const {response,data}=await apiFetch("/translate",{
+      method:"POST",body:JSON.stringify({text,language})
+    });
+    result.textContent=response.ok?
+      (data.translation||data.reply||data.result||"No translation received."):
+      (data.error||"Translation failed.");
+  }catch(error){
+    console.error(error);
+    result.textContent="Could not connect to the server.";
+  }
 }
 
-
-/* SIDE MENU */
-
-function showTool(id,button){
-
-document
-.querySelectorAll(".main-box")
-.forEach(x=>x.classList.add("hidden"));
-
-const target=document.getElementById(id);
-
-if(target){
-target.classList.remove("hidden");
+async function runRewrite(){
+  const text=document.getElementById("rewriteInput").value.trim();
+  const result=document.getElementById("rewriteResult");
+  if(!text){result.textContent="Please enter text to rewrite.";return;}
+  result.textContent="Rewriting...";
+  try{
+    const {response,data}=await apiFetch("/rewrite",{
+      method:"POST",body:JSON.stringify({text})
+    });
+    result.textContent=response.ok?
+      (data.rewritten||data.reply||data.result||"No rewritten text received."):
+      (data.error||"Rewrite failed.");
+  }catch(error){
+    console.error(error);
+    result.textContent="Could not connect to the server.";
+  }
 }
 
-document
-.querySelectorAll(".side-menu button")
-.forEach(x=>x.classList.remove("active"));
-
-if(button){
-button.classList.add("active");
+/* Notes are saved in this browser */
+function notesKey(){
+  return "smartHelperNotes_"+(currentUser?(currentUser.id||currentUser.email):"guest");
+}
+function loadNotes(){
+  document.getElementById("notesInput").value=localStorage.getItem(notesKey())||"";
+  document.getElementById("notesResult").textContent="";
+}
+function saveNotes(){
+  localStorage.setItem(notesKey(),document.getElementById("notesInput").value);
+  document.getElementById("notesResult").textContent="Notes saved on this device.";
+}
+function clearNotes(){
+  if(!confirm("Clear your saved notes on this device?"))return;
+  localStorage.removeItem(notesKey());
+  document.getElementById("notesInput").value="";
+  document.getElementById("notesResult").textContent="Notes cleared.";
 }
 
-if(id==="cryptoTool"){
-
-updateCryptoUI();
-
-drawChart();
-
-}
-
-}
-
-
-/* ASK AI */
-
-async function askAI(){
-
-const message=
-document.getElementById("message").value.trim();
-
-const out=
-document.getElementById("askResult");
-
-if(!message){
-
-out.textContent="Please enter a question.";
-
-return;
-
-}
-
-out.textContent="Thinking...";
-
-try{
-
-const {response,data}=await apiFetch(
-"/ask",
-{
-method:"POST",
-body:JSON.stringify({message})
-}
-);
-
-out.textContent=
-response.ok
-?(data.reply||"No reply received.")
-:data.error||"AI request failed.";
-
-}catch(e){
-
-out.textContent="Could not connect to server.";
-
-}
-
-}
-
-
-/* REWRITE */
-
-async function rewriteText(){
-
-const text=
-document.getElementById("rewriteText")
-.value
-.trim();
-
-const out=
-document.getElementById("rewriteResult");
-
-if(!text){
-
-out.textContent="Please enter text.";
-
-return;
-
-}
-
-out.textContent="Rewriting...";
-
-try{
-
-const {response,data}=await apiFetch(
-"/rewrite",
-{
-method:"POST",
-body:JSON.stringify({text})
-}
-);
-
-out.textContent=
-response.ok
-?(data.rewritten||data.reply||"No result.")
-:data.error||"Rewrite failed.";
-
-}catch(e){
-
-out.textContent="Could not connect to server.";
-
-}
-
-}
-
-
-/* TRANSLATE */
-
-async function translateText(){
-
-const text=
-document
-.getElementById("translateTextInput")
-.value
-.trim();
-
-const language=
-document.getElementById("language").value;
-
-const out=
-document.getElementById("translateResult");
-
-if(!text){
-
-out.textContent="Please enter text.";
-
-return;
-
-}
-
-out.textContent="Translating...";
-
-try{
-
-const {response,data}=await apiFetch(
-"/translate",
-{
-method:"POST",
-body:JSON.stringify({
-text,
-language
-})
-}
-);
-
-out.textContent=
-response.ok
-?(data.translation||data.translatedText||"No translation.")
-:data.error||"Translation failed.";
-
-}catch(e){
-
-out.textContent="Could not connect to server.";
-
-}
-
-}
-
-
-/* CHAT */
-
-function addChat(text,cls){
-
-const w=
-document.getElementById("chatWindow");
-
-const d=
-document.createElement("div");
-
-d.className=
-"message "+cls;
-
-d.textContent=text;
-
-w.appendChild(d);
-
-w.scrollTop=w.scrollHeight;
-
-}
-
-
-async function sendChat(){
-
-const input=
-document.getElementById("chatInput");
-
-const text=input.value.trim();
-
-if(!text)return;
-
-addChat(text,"user-message");
-
-input.value="";
-
-addChat("Thinking...","ai-message");
-
-const last=
-document.querySelector(
-"#chatWindow .ai-message:last-child"
-);
-
-try{
-
-const {response,data}=await apiFetch(
-"/ask",
-{
-method:"POST",
-body:JSON.stringify({message:text})
-}
-);
-
-last.textContent=
-response.ok
-?(data.reply||"No reply.")
-:data.error||"Chat failed.";
-
-}catch(e){
-
-last.textContent="Could not connect to server.";
-
-}
-
-}
-
-
-/* HISTORY */
-
+/* Server-side chat history */
 async function loadHistory(){
-
-const list=
-document.getElementById("historyList");
-
-list.textContent="Loading...";
-
-try{
-
-const {response,data}=await apiFetch("/history");
-
-if(!response.ok){
-
-list.textContent=
-data.error||
-"Could not load history.";
-
-return;
-
+  const result=document.getElementById("historyResult");
+  result.textContent="Loading history...";
+  try{
+    const {response,data}=await apiFetch("/history");
+    if(!response.ok){
+      result.textContent=data.error||"Could not load history.";
+      return;
+    }
+    const chats=data.chats||data.history||[];
+    result.replaceChildren();
+    if(!chats.length){
+      result.textContent="No history yet. Use Ask AI or Rewrite first.";
+      return;
+    }
+    chats.forEach(chat=>{
+      const item=document.createElement("article");
+      item.className="history-item";
+      const time=document.createElement("time");
+      const date=new Date(chat.created_at||chat.createdAt||"");
+      time.textContent=Number.isNaN(date.getTime())?"":date.toLocaleString();
+      const question=document.createElement("p");
+      question.textContent="Question: "+(chat.message||"");
+      const answer=document.createElement("p");
+      answer.textContent="Answer: "+(chat.reply||chat.rewritten||"");
+      item.append(time,question,answer);
+      result.appendChild(item);
+    });
+  }catch(error){
+    console.error(error);
+    result.textContent="Could not connect to the server.";
+  }
 }
-
-const rows=
-data.history||
-data||
-[];
-
-if(!Array.isArray(rows)||!rows.length){
-
-list.textContent="No history yet.";
-
-return;
-
-}
-
-list.innerHTML="";
-
-rows.forEach(x=>{
-
-const d=
-document.createElement("div");
-
-d.className="history-item";
-
-d.innerHTML=
-"<div class='history-user'></div>"+
-"<div class='history-ai'></div>"+
-"<div class='history-time'></div>";
-
-d.querySelector(".history-user")
-.textContent=
-"You: "+
-(x.message||x.user_message||"");
-
-d.querySelector(".history-ai")
-.textContent=
-"AI: "+
-(x.reply||x.ai_reply||"");
-
-d.querySelector(".history-time")
-.textContent=
-x.created_at||
-x.createdAt||
-"";
-
-list.appendChild(d);
-
-});
-
-}catch(e){
-
-list.textContent=
-"Could not connect to server.";
-
-}
-
-}
-
-
-/* CLEAR HISTORY */
 
 async function clearHistory(){
-
-if(!confirm("Clear chat history?"))
-return;
-
-const {response,data}=
-await apiFetch(
-"/history",
-{
-method:"DELETE"
-}
-);
-
-if(!response.ok){
-
-alert(
-data.error||
-"Could not clear history."
-);
-
-}else{
-
-loadHistory();
-
+  if(!confirm("Delete all your saved AI and Rewrite history?"))return;
+  const result=document.getElementById("historyResult");
+  result.textContent="Deleting...";
+  try{
+    const {response,data}=await apiFetch("/history",{method:"DELETE"});
+    if(!response.ok){
+      result.textContent=data.error||"Could not delete history.";
+      return;
+    }
+    result.textContent="History cleared.";
+  }catch(error){
+    console.error(error);
+    result.textContent="Could not connect to the server.";
+  }
 }
 
+/* Bitcoin live market dashboard */
+function fmtMoney(value){
+  if(!Number.isFinite(Number(value)))return "—";
+  return "$"+Number(value).toLocaleString("en-US",{
+    minimumFractionDigits:2,maximumFractionDigits:2
+  });
+}
+function fmtCompact(value){
+  if(!Number.isFinite(Number(value)))return "—";
+  return "$"+new Intl.NumberFormat("en-US",{
+    notation:"compact",maximumFractionDigits:2
+  }).format(value);
+}
+function setTrend(change){
+  const badge=document.getElementById("btcTrend");
+  const changeElement=document.getElementById("btcChange");
+  if(change>0){
+    badge.textContent="▲ UP "+change.toFixed(2)+"%";
+    badge.className="pill up";
+    changeElement.className="positive";
+    changeElement.textContent="+"+change.toFixed(2)+"% in the last 24 hours";
+  }else if(change<0){
+    badge.textContent="▼ DOWN "+Math.abs(change).toFixed(2)+"%";
+    badge.className="pill down";
+    changeElement.className="negative";
+    changeElement.textContent=change.toFixed(2)+"% in the last 24 hours";
+  }else{
+    badge.textContent="— FLAT";
+    badge.className="pill flat";
+    changeElement.className="muted";
+    changeElement.textContent="Little or no change in the last 24 hours";
+  }
 }
 
-
-/* CRYPTO */
-
-const cryptoPrices={
-BTC:65000,
-ETH:3200,
-SOL:150,
-XRP:.60
-};
-
-const coinNames={
-BTC:"Bitcoin (BTC)",
-ETH:"Ethereum (ETH)",
-SOL:"Solana (SOL)",
-XRP:"XRP"
-};
-
-let selectedCrypto="BTC";
-
-let currentPrices={
-...cryptoPrices
-};
-
-let prediction=null;
-
-let priceHistory=[];
-
-let cryptoDemo=
-JSON.parse(
-localStorage.getItem(
-"smartHelperCryptoDemo"
-)||"null"
-)||{
-
-balance:10000,
-
-holdings:{
-BTC:0,
-ETH:0,
-SOL:0,
-XRP:0
-},
-
-trades:[]
-
-};
-
-
-/* SAVE CRYPTO */
-
-function saveCrypto(){
-
-localStorage.setItem(
-"smartHelperCryptoDemo",
-JSON.stringify(cryptoDemo)
-);
-
+async function loadCryptoPrice(){
+  const request=++marketRequest;
+  document.getElementById("btcUpdated").textContent="Updating market data...";
+  try{
+    const response=await fetch(
+      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&price_change_percentage=24h"
+    );
+    if(!response.ok)throw new Error("Market API unavailable");
+    const list=await response.json();
+    if(request!==marketRequest)return;
+    if(!Array.isArray(list)||!list[0])throw new Error("No market data");
+    const coin=list[0];
+    currentBTCPrice=Number(coin.current_price)||0;
+    document.getElementById("btcPrice").textContent=fmtMoney(currentBTCPrice);
+    setTrend(Number(coin.price_change_percentage_24h)||0);
+    document.getElementById("btcHigh").textContent=fmtMoney(coin.high_24h);
+    document.getElementById("btcLow").textContent=fmtMoney(coin.low_24h);
+    document.getElementById("btcCap").textContent=fmtCompact(coin.market_cap);
+    document.getElementById("btcVolume").textContent=fmtCompact(coin.total_volume);
+    document.getElementById("btcUpdated").textContent=
+      "Last updated "+new Date().toLocaleTimeString()+" · Source: CoinGecko";
+    updateTradeEstimate();
+    loadCryptoChart(btcChartDays);
+  }catch(error){
+    console.error(error);
+    document.getElementById("btcUpdated").textContent=
+      "Live price unavailable. The market API may be busy; try Refresh.";
+    document.getElementById("cryptoChartStatus").textContent=
+      "Chart will appear when market data is available.";
+  }
 }
 
-
-/* FORMAT */
-
-function fmt(n){
-
-return "$"+
-Number(n||0).toLocaleString(
-undefined,
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-
-}
-
-
-/* SELECT COIN */
-
-function selectCrypto(c){
-
-selectedCrypto=c;
-
-document
-.querySelectorAll(".coin-btn")
-.forEach(
-b=>
-b.classList.toggle(
-"active",
-b.dataset.coin===c
-)
-);
-
-updateCryptoUI();
-
-drawChart();
-
+async function loadCryptoChart(days){
+  btcChartDays=String(days);
+  ["1","7","30"].forEach(day=>{
+    const button=document.getElementById("chart"+day);
+    button.className=day===btcChartDays?"selected":"secondary";
+  });
+  const request=++chartRequest;
+  document.getElementById("cryptoChartStatus").textContent="Loading chart...";
+  try{
+    const response=await fetch(
+      "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days="+encodeURIComponent(btcChartDays)
+    );
+    if(!response.ok)throw new Error("Chart unavailable");
+    const data=await response.json();
+    if(request!==chartRequest)return;
+    btcChartValues=(data.prices||[]).map(point=>({time:point[0],price:point[1]}));
+    if(!btcChartValues.length)throw new Error("No chart values");
+    drawBTCChart();
+    document.getElementById("cryptoChartStatus").textContent=
+      "Bitcoin / USD · "+(btcChartDays==="1"?"Last 24 hours":btcChartDays==="7"?"Last 7 days":"Last 30 days");
+  }catch(error){
+    console.error(error);
+    document.getElementById("cryptoChartStatus").textContent=
+      "Chart unavailable right now. Please try again later.";
+  }
 }
 
+function drawBTCChart(){
+  const canvas=document.getElementById("btcChart");
+  if(!canvas||!btcChartValues.length)return;
+  const rect=canvas.getBoundingClientRect();
+  const width=Math.max(280,rect.width);
+  const height=canvas.clientHeight||310;
+  const scale=window.devicePixelRatio||1;
+  canvas.width=Math.round(width*scale);
+  canvas.height=Math.round(height*scale);
+  const ctx=canvas.getContext("2d");
+  ctx.setTransform(scale,0,0,scale,0,0);
+  ctx.clearRect(0,0,width,height);
 
-/* CRYPTO UI */
+  const values=btcChartValues.map(p=>p.price).filter(Number.isFinite);
+  if(!values.length)return;
+  const min=Math.min(...values),max=Math.max(...values);
+  const range=max-min||1;
+  const left=65,right=10,top=16,bottom=30;
+  const chartW=width-left-right,chartH=height-top-bottom;
 
-function updateCryptoUI(){
+  ctx.font="11px Arial";
+  ctx.lineWidth=1;
+  ctx.strokeStyle="#28364a";
+  ctx.fillStyle="#9eacc0";
+  for(let i=0;i<=4;i++){
+    const y=top+chartH*i/4;
+    ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(width-right,y);ctx.stroke();
+    const label=fmtCompact(max-range*i/4);
+    ctx.fillText(label,3,y+4);
+  }
 
-document
-.getElementById("selectedCoinLabel")
-.textContent=
-coinNames[selectedCrypto];
+  const coords=btcChartValues.map((p,i)=>({
+    x:left+chartW*i/Math.max(1,btcChartValues.length-1),
+    y:top+chartH*(max-p.price)/range
+  }));
+  const rising=values[values.length-1]>=values[0];
+  const color=rising?"#22c55e":"#ef4444";
 
-document
-.getElementById("selectedPrice")
-.textContent=
-fmt(currentPrices[selectedCrypto]);
+  const gradient=ctx.createLinearGradient(0,top,0,height-bottom);
+  gradient.addColorStop(0,rising?"rgba(34,197,94,.25)":"rgba(239,68,68,.25)");
+  gradient.addColorStop(1,"rgba(11,18,32,0)");
 
-document
-.getElementById("btcNumber")
-.textContent=
-fmt(currentPrices.BTC);
+  ctx.beginPath();
+  coords.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.lineTo(coords[coords.length-1].x,height-bottom);
+  ctx.lineTo(coords[0].x,height-bottom);
+  ctx.closePath();
+  ctx.fillStyle=gradient;ctx.fill();
 
-let total=
-cryptoDemo.balance;
+  ctx.beginPath();
+  coords.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();
 
-Object
-.keys(cryptoDemo.holdings)
-.forEach(c=>{
+  const last=coords[coords.length-1];
+  ctx.beginPath();ctx.arc(last.x,last.y,3.5,0,Math.PI*2);
+  ctx.fillStyle=color;ctx.fill();
 
-total+=
-cryptoDemo.holdings[c]*
-currentPrices[c];
-
-});
-
-document
-.getElementById("demoBalance")
-.textContent=
-fmt(cryptoDemo.balance);
-
-document
-.getElementById("portfolioValue")
-.textContent=
-fmt(total);
-
-
-/* HOLDINGS */
-
-const hb=
-document.getElementById("holdingsBody");
-
-hb.innerHTML="";
-
-Object
-.keys(cryptoDemo.holdings)
-.forEach(c=>{
-
-const tr=
-document.createElement("tr");
-
-tr.innerHTML=
-"<td>"+
-coinNames[c]+
-"</td><td>"+
-cryptoDemo.holdings[c].toFixed(6)+
-"</td><td>"+
-fmt(
-cryptoDemo.holdings[c]*
-currentPrices[c]
-)+
-"</td>";
-
-hb.appendChild(tr);
-
-});
-
-
-/* TRADES */
-
-const tb=
-document.getElementById("tradesBody");
-
-tb.innerHTML="";
-
-cryptoDemo.trades
-.slice()
-.reverse()
-.forEach(t=>{
-
-const tr=
-document.createElement("tr");
-
-tr.innerHTML=
-"<td>"+
-t.time+
-"</td><td>"+
-t.side+
-"</td><td>"+
-t.coin+
-"</td><td>"+
-t.amount+
-"</td><td>"+
-fmt(t.price)+
-"</td>";
-
-tb.appendChild(tr);
-
-});
-
+  ctx.fillStyle="#9eacc0";
+  const firstDate=new Date(btcChartValues[0].time);
+  const lastDate=new Date(btcChartValues[btcChartValues.length-1].time);
+  const firstLabel=btcChartDays==="1"?firstDate.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):firstDate.toLocaleDateString();
+  const lastLabel=btcChartDays==="1"?lastDate.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):lastDate.toLocaleDateString();
+  ctx.fillText(firstLabel,left,height-8);
+  ctx.fillText(lastLabel,Math.max(left,width-right-ctx.measureText(lastLabel).width),height-8);
 }
 
+/* Virtual demo trades; no real transactions */
+function getDemoAccount(){
+  try{
+    const account=JSON.parse(localStorage.getItem("smartHelperDemoTrading")||"null");
+    if(account&&typeof account.balance==="number"&&typeof account.btc==="number"&&Array.isArray(account.trades))return account;
+  }catch(error){console.warn(error);}
+  return {balance:10000,btc:0,trades:[]};
+}
+let demoAccount=getDemoAccount();
 
-/* PREDICTION */
+function saveDemoAccount(){
+  localStorage.setItem("smartHelperDemoTrading",JSON.stringify(demoAccount));
+}
+function updateTradeEstimate(){
+  const amount=Number(document.getElementById("tradeAmount").value);
+  document.getElementById("estimatedBTC").textContent=
+    amount>0&&currentBTCPrice>0?(amount/currentBTCPrice).toFixed(8)+" BTC":"—";
+}
+function updateDemoSummary(){
+  document.getElementById("demoBalance").textContent=fmtMoney(demoAccount.balance);
+  document.getElementById("demoBTC").textContent=demoAccount.btc.toFixed(8)+" BTC";
+  renderDemoTrades();
+  updateTradeEstimate();
+}
+function placeDemoTrade(side){
+  const message=document.getElementById("tradeMessage");
+  const amount=Number(document.getElementById("tradeAmount").value);
+  if(currentBTCPrice<=0){message.textContent="Live BTC price is unavailable.";return;}
+  if(!Number.isFinite(amount)||amount<=0){message.textContent="Enter a valid USD amount.";return;}
+  const btc=amount/currentBTCPrice;
 
-function startPrediction(direction){
+  if(side==="BUY"){
+    if(amount>demoAccount.balance){message.textContent="Insufficient demo USD balance.";return;}
+    demoAccount.balance-=amount;
+    demoAccount.btc+=btc;
+  }else{
+    if(btc>demoAccount.btc){message.textContent="Not enough demo BTC to sell.";return;}
+    demoAccount.balance+=amount;
+    demoAccount.btc-=btc;
+  }
 
-prediction={
-coin:selectedCrypto,
-direction:direction,
-entryPrice:currentPrices[selectedCrypto],
-active:true
-};
-
-document
-.getElementById("predictionStatus")
-.className="status wait";
-
-document
-.getElementById("predictionStatus")
-.textContent=
-direction+
-" selected — watching price...";
-
-document
-.getElementById("entryInfo")
-.textContent=
-"Entry line: "+
-fmt(prediction.entryPrice)+
-" • "+
-direction+
-" • "+
-coinNames[prediction.coin];
-
-drawChart();
-
+  demoAccount.trades.unshift({
+    side,usd:amount,btc,price:currentBTCPrice,time:new Date().toISOString()
+  });
+  demoAccount.trades=demoAccount.trades.slice(0,100);
+  saveDemoAccount();
+  updateDemoSummary();
+  message.textContent="Demo "+side+" recorded. No real order or transfer was made.";
+}
+function renderDemoTrades(){
+  const container=document.getElementById("demoTradeHistory");
+  if(!container)return;
+  container.replaceChildren();
+  if(!demoAccount.trades.length){
+    container.textContent="No demo trades yet.";
+    return;
+  }
+  demoAccount.trades.forEach(trade=>{
+    const item=document.createElement("div");
+    item.className="history-item";
+    const title=document.createElement("strong");
+    title.textContent=trade.side+" BTC · DEMO";
+    title.className=trade.side==="BUY"?"positive":"negative";
+    const details=document.createElement("p");
+    details.textContent=fmtMoney(trade.usd)+" · "+Number(trade.btc).toFixed(8)+" BTC · Price "+fmtMoney(trade.price);
+    const time=document.createElement("time");
+    time.textContent=new Date(trade.time).toLocaleString();
+    item.append(title,details,time);
+    container.appendChild(item);
+  });
 }
 
-
-/* STOP */
-
-function stopPrediction(){
-
-prediction=null;
-
-document
-.getElementById("predictionStatus")
-.className="status wait";
-
-document
-.getElementById("predictionStatus")
-.textContent=
-"No prediction active";
-
-document
-.getElementById("entryInfo")
-.textContent=
-"Entry line: —";
-
-drawChart();
-
-}
-
-
-/* UPDATE PREDICTION */
-
-function updatePrediction(){
-
-if(!prediction||!prediction.active)
-return;
-
-const p=
-currentPrices[prediction.coin];
-
-const e=
-prediction.entryPrice;
-
-let result="WAIT";
-
-let cls="wait";
-
-if(p>e){
-
-result=
-prediction.direction==="UP"
-?"WIN"
-:"LOSE";
-
-cls=result.toLowerCase();
-
-}
-
-if(p<e){
-
-result=
-prediction.direction==="DOWN"
-?"WIN"
-:"LOSE";
-
-cls=result.toLowerCase();
-
-}
-
-const el=
-document.getElementById(
-"predictionStatus"
-);
-
-el.className=
-"status "+cls;
-
-el.textContent=
-prediction.direction+
-" • "+
-result+
-" • Current: "+
-fmt(p);
-
-}
-
-
-/* MOVE PRICES */
-
-function movePrices(){
-
-Object
-.keys(currentPrices)
-.forEach(c=>{
-
-const base=
-currentPrices[c];
-
-const pct=
-(Math.random()-.5)*.012;
-
-currentPrices[c]=
-Math.max(
-c==="XRP"
-?.05
-:base*.5,
-base*(1+pct)
-);
-
-});
-
-
-priceHistory.push({
-
-t:Date.now(),
-
-p:currentPrices[selectedCrypto]
-
-});
-
-if(priceHistory.length>70)
-priceHistory.shift();
-
-document
-.getElementById("selectedPrice")
-.textContent=
-fmt(currentPrices[selectedCrypto]);
-
-document
-.getElementById("btcNumber")
-.textContent=
-fmt(currentPrices.BTC);
-
-updateCryptoUI();
-
-updatePrediction();
-
-drawChart();
-
-}
-
-
-/* CHART */
-
-function drawChart(){
-
-const canvas=
-document.getElementById("cryptoChart");
-
-if(!canvas)return;
-
-const rect=
-canvas.getBoundingClientRect();
-
-const dpr=
-window.devicePixelRatio||1;
-
-canvas.width=
-rect.width*dpr;
-
-canvas.height=
-280*dpr;
-
-const ctx=
-canvas.getContext("2d");
-
-ctx.scale(dpr,dpr);
-
-const w=rect.width;
-
-const h=280;
-
-ctx.fillStyle="#070b18";
-
-ctx.fillRect(
-0,
-0,
-w,
-h
-);
-
-const arr=
-priceHistory.length
-?priceHistory.map(x=>x.p)
-:[currentPrices[selectedCrypto]];
-
-const min=
-Math.min(...arr)*.998;
-
-const max=
-Math.max(...arr)*1.002;
-
-const range=
-max-min||1;
-
-
-/* GRID */
-
-ctx.strokeStyle="#252d52";
-
-ctx.lineWidth=1;
-
-for(let i=1;i<5;i++){
-
-const y=
-i*h/5;
-
-ctx.beginPath();
-
-ctx.moveTo(0,y);
-
-ctx.lineTo(w,y);
-
-ctx.stroke();
-
-}
-
-
-/* PRICE LINE */
-
-ctx.strokeStyle="#818cf8";
-
-ctx.lineWidth=2;
-
-ctx.beginPath();
-
-arr.forEach(
-(p,i)=>{
-
-const x=
-arr.length===1
-?w/2
-:i*(w-10)/(arr.length-1)+5;
-
-const y=
-h-
-((p-min)/range)*
-h*.82-
-h*.09;
-
-if(i)
-ctx.lineTo(x,y);
-else
-ctx.moveTo(x,y);
-
-});
-
-ctx.stroke();
-
-
-/* ENTRY */
-
-if(
-prediction&&
-prediction.coin===selectedCrypto
-){
-
-const y=
-h-
-((prediction.entryPrice-min)/range)*
-h*.82-
-h*.09;
-
-ctx.setLineDash([8,6]);
-
-ctx.strokeStyle="#fbbf24";
-
-ctx.beginPath();
-
-ctx.moveTo(0,y);
-
-ctx.lineTo(w,y);
-
-ctx.stroke();
-
-ctx.setLineDash([]);
-
-ctx.fillStyle="#fbbf24";
-
-ctx.font="12px Arial";
-
-ctx.fillText(
-"ENTRY "+
-fmt(prediction.entryPrice),
-10,
-Math.max(16,y-8)
-);
-
-}
-
-}
-
-
-/* TRADE */
-
-function executeTrade(){
-
-const side=
-document.getElementById("tradeSide").value;
-
-const amount=
-Number(
-document.getElementById("tradeAmount").value
-);
-
-const price=
-currentPrices[selectedCrypto];
-
-const msg=
-document.getElementById("tradeMessage");
-
-if(!amount||amount<=0){
-
-msg.textContent=
-"Enter a valid amount.";
-
-return;
-
-}
-
-const value=
-amount*price;
-
-
-if(side==="BUY"){
-
-if(value>cryptoDemo.balance){
-
-msg.textContent=
-"Not enough demo balance.";
-
-return;
-
-}
-
-cryptoDemo.balance-=value;
-
-cryptoDemo
-.holdings[selectedCrypto]+=amount;
-
-}else{
-
-if(
-cryptoDemo.holdings[selectedCrypto]<
-amount
-){
-
-msg.textContent=
-"Not enough demo holdings.";
-
-return;
-
-}
-
-cryptoDemo.balance+=value;
-
-cryptoDemo
-.holdings[selectedCrypto]-=amount;
-
-}
-
-
-cryptoDemo.trades.push({
-
-time:
-new Date().toLocaleString(),
-
-side:side,
-
-coin:selectedCrypto,
-
-amount:
-amount.toFixed(6),
-
-price:price
-
-});
-
-
-if(cryptoDemo.trades.length>50)
-cryptoDemo.trades.shift();
-
-saveCrypto();
-
-msg.textContent=
-side+
-" demo trade completed: "+
-amount.toFixed(6)+
-" "+
-selectedCrypto+
-" at "+
-fmt(price);
-
-updateCryptoUI();
-
-}
-
-
-/* RESET */
-
-function resetCryptoDemo(){
-
-if(
-!confirm(
-"Reset demo balance and trades?"
-)
-)
-return;
-
-cryptoDemo={
-
-balance:10000,
-
-holdings:{
-BTC:0,
-ETH:0,
-SOL:0,
-XRP:0
-},
-
-trades:[]
-
-};
-
-saveCrypto();
-
-updateCryptoUI();
-
-}
-
-
-/* PRICE TIMER */
-
-setInterval(
-movePrices,
-2000
-);
-
-
-/* RESIZE */
-
-window.addEventListener(
-"resize",
-drawChart
-);
-
-
-/* START */
-
+document.getElementById("tradeAmount").addEventListener("input",updateTradeEstimate);
+window.addEventListener("resize",drawBTCChart);
+
+initLanguages();
+updateLoggedInUI();
+updateDemoSummary();
 checkSession();
-
 </script>
-
 </body>
 </html>
+
